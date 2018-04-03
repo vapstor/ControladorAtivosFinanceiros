@@ -1,14 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.controladorAtivosFinanceiros;
 
 /**
  *
  * @author vapstor
  */
-public class Acionista {
-    TESTE
+public class Acionista extends Carteira {
+    private String CPF;
+    private String nome = "Nome Teste";
+    private Carteira carteira;
+    
+    public String getCPF() {
+        return this.CPF;
+    }
+    
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Carteira getCarteira() {
+        return carteira;
+    }
+
+    public void setCarteira(Carteira carteira) {
+        this.carteira = carteira;
+    }
+    
 }
