@@ -4,8 +4,8 @@ package dao.controladorAtivosFinanceiros;
  * @author vapstor
  */
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 //Pré Compila Declaração SQL
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public abstract class GenericDAO {

@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 public class AcionistasDAO extends GenericDAO {
     public void salvar(Acionista acionista) throws SQLException {
         String insert = "insert into acoes_db.Acionistas ("
-                + "CPF, nome, carteira)"
+                + "CPF, Nome, IDCarteira)"
                 + "values (?,?,?)";
         save(
                 insert, acionista.getCPF(), acionista.getNome(), 

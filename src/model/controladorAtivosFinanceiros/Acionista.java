@@ -4,10 +4,10 @@ package model.controladorAtivosFinanceiros;
  *
  * @author vapstor
  */
-public class Acionista extends Carteira {
+public class Acionista {
     private String CPF;
-    private String nome = "Nome Teste";
-    private Carteira carteira;
+    private String nome;
+    private int carteira;
     
     public String getCPF() {
         return this.CPF;
@@ -25,11 +25,11 @@ public class Acionista extends Carteira {
         this.nome = nome;
     }
 
-    public Carteira getCarteira() {
+    public int getCarteira() {
         return carteira;
     }
 
-    public void setCarteira(Carteira carteira) {
+    public void setCarteira(int carteira) {
         this.carteira = carteira;
     }
     

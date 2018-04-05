@@ -5,10 +5,16 @@
  */
 package main.controladorAtivosFinanceiros;
 
+import view.controladorAtivosFinanceiros.telaTesteUI;
+
 /**
  *
  * @author vapstor
  */
 public class Main {
+    public static void main(String[] args) {
+        telaTesteUI gui = new telaTesteUI();
+        gui.setVisible(true);
+   }   
     
 }

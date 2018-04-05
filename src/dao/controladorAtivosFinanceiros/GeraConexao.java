@@ -12,14 +12,12 @@ import java.sql.SQLException;
 public class GeraConexao {
     
     private static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/estacionamento_db";
-    private static final String USER = "admindb";
-    private static final String PASS = "admindb";
+    private static final String URL = "jdbc:mysql://localhost/acoes_db";
+    private static final String USER = "root";
+    private static final String PASS = "aff0123456";
 
     public static Connection GeraConexao() {
         Connection Conexao;
-        Conexao = null;
-        
         try {
             Conexao = DriverManager.getConnection(URL, USER, PASS);
         } catch (SQLException e) {
