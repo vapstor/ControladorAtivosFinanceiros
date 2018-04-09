@@ -35,7 +35,7 @@ public class ConnectionDataBase {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+                    	throw new RuntimeException(e);
 		}
 		return null;
 	}

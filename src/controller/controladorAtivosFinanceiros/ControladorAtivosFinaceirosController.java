@@ -9,12 +9,12 @@ import model.controladorAtivosFinanceiros.Acionista;
  */
 public class ControladorAtivosFinaceirosController {
     
-    public void registraEntrada(String cpf, String nome, int carteira) throws SQLException, ParseException {
+    public void addAcionista(String cpf, String nome, int carteira) throws SQLException, ParseException {
         Acionista user  = new Acionista();
         user.setCPF(cpf);
         user.setNome(nome);
         user.setCarteira(carteira);
-
+        
         new AcionistasDAO().salvar(user);
     }
     

@@ -14,13 +14,14 @@ import javax.swing.JOptionPane;
  */
 public class AcionistasDAO extends GenericDAO {
     public void salvar(Acionista acionista) throws SQLException {
-        String insert = "insert into acoes_db.Acionistas ("
-                + "CPF, Nome, IDCarteira)"
+        String insert = "INSERT INTO acoes_db.Acionistas ("
+                + "CPF, Nome, Carteira)"
                 + "values (?,?,?)";
         save(
                 insert, acionista.getCPF(), acionista.getNome(), 
                 acionista.getCarteira()
         );
+        JOptionPane.showMessageDialog(null, "Usuário Inserido com sucesso na base de dados!", "Usuário Adicionado", JOptionPane.INFORMATION_MESSAGE);
     }
     
 
