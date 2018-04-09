@@ -138,7 +138,7 @@ public class telaTesteUI extends javax.swing.JFrame {
     private void onClickAddUser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClickAddUser
         ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
         try {
-            caf.addAcionista(
+            caf.registraEntrada(
                     inputCPF.getText(), 
                     inputNome.getText(),
                     Integer.parseInt(inputCarteira.getText())
