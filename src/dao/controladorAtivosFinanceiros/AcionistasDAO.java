@@ -4,17 +4,28 @@ import model.controladorAtivosFinanceiros.Acionista;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import javax.swing.JOptionPane;
+import model.controladorAtivosFinanceiros.User;
 
 /**
  *
  * @author vapstor
  */
 public class AcionistasDAO extends GenericDAO {
+     public void salvarUser(User user) throws SQLException {
+        String insert = "INSERT INTO Users ("
+                + "CPF, Password)"
+                + "values (?,?)";
+        save(
+                insert, user.getCPF(), user.getPassword()
+        );
+        JOptionPane.showMessageDialog(null, "Usuário Inserido com sucesso na base de dados!", "Usuário Adicionado", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     public void salvar(Acionista acionista) throws SQLException {
-        String insert = "INSERT INTO acoes_db.Acionistas ("
+        String insert = "INSERT INTO Acionistas ("
                 + "CPF, Nome, Carteira)"
                 + "values (?,?,?)";
         save(
