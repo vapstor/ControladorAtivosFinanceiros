@@ -189,7 +189,7 @@ public class TelaPerfilAcionista extends javax.swing.JFrame {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         this.acionistaPesquisado = null;
-        System.exit(1);
+        System.exit(0);
     }//GEN-LAST:event_backBtnActionPerformed
     
     void recebeAcionista(Acionista acionista) {

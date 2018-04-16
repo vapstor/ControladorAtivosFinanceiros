@@ -240,7 +240,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private void quitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitBtnActionPerformed
         int dialogButton = JOptionPane.showConfirmDialog(this, "Você realmente deseja sair?", "Sair", JOptionPane.YES_NO_OPTION);
         if(dialogButton == JOptionPane.YES_OPTION) {
-            System.exit(1);
+            System.exit(0);
         }
     }//GEN-LAST:event_quitBtnActionPerformed
     
