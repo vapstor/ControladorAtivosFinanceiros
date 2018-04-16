@@ -5,8 +5,7 @@ package model.controladorAtivosFinanceiros;
  * @author vapstor
  */
 public class Acionista {
-    private String CPF;
-    private String nome;
+    private String CPF, nome, password;
     private int carteira;
     
     public String getCPF() {
@@ -31,6 +30,14 @@ public class Acionista {
 
     public void setCarteira(int carteira) {
         this.carteira = carteira;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
     
 }

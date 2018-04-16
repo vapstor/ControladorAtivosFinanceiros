@@ -5,7 +5,7 @@
  */
 package main.controladorAtivosFinanceiros;
 
-import view.controladorAtivosFinanceiros.telaTesteUI;
+import view.controladorAtivosFinanceiros.TelaLogin;
 
 /**
  *
@@ -13,7 +13,7 @@ import view.controladorAtivosFinanceiros.telaTesteUI;
  */
 public class Main {
     public static void main(String[] args) {
-        telaTesteUI gui = new telaTesteUI();
+        TelaLogin gui = new TelaLogin();
         gui.setVisible(true);
    }   
     

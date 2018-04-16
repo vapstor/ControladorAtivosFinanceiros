@@ -3,28 +3,24 @@ import dao.controladorAtivosFinanceiros.AcionistasDAO;
 import java.sql.SQLException;
 import java.text.ParseException;
 import model.controladorAtivosFinanceiros.Acionista;
-import model.controladorAtivosFinanceiros.User;
 /**
  *
  * @author vapstor
  */
-public class ControladorAtivosFinaceirosController {
+public class ControladorAtivosFinaceirosController extends AcionistasDAO{
     
-    public void addUser(String cpf, char[] Password) throws SQLException, ParseException {
-        User user  = new User();
-        user.setCPF(cpf);
-        user.setPassword(Password);
+    public void addAcionista(String cpf, String nome, int carteira, String password) throws SQLException, ParseException {
+        Acionista acionista  = new Acionista();
+        acionista.setCPF(cpf);
+        acionista.setNome(nome);
+        acionista.setCarteira(carteira);
+        acionista.setPassword(password);
         
-        new AcionistasDAO().salvarUser(user);
+        new AcionistasDAO().salvar(acionista);
     }
     
-    public void addAcionista(String cpf, String nome, int carteira) throws SQLException, ParseException {
-        Acionista user  = new Acionista();
-        user.setCPF(cpf);
-        user.setNome(nome);
-        user.setCarteira(carteira);
-        
-        new AcionistasDAO().salvar(user);
+    public boolean autenticaUser(String CPF, String Password) throws SQLException, ParseException {
+        return new AcionistasDAO().autenticador(CPF, Password);
     }
     
 }
