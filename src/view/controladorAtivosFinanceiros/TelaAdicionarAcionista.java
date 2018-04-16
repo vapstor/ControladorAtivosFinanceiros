@@ -44,6 +44,12 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        inputCarteira.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                inputCarteiraKeyReleased(evt);
+            }
+        });
+
         labelCPF.setText("CPF:");
 
         labelCarteira.setText("Nº Carteira:");
@@ -157,26 +163,32 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
     private void onClickAddUser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClickAddUser
         ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
         String pass;
-        try {
-            char[] password = inputPassword.getPassword();
-            pass = String.valueOf(password);
-            caf.addAcionista(
-                    inputCPF.getText(), 
-                    inputNome.getText(),
-                    Integer.parseInt(inputCarteira.getText()),
-                    pass
-            );
-            clearFields();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-				"Nao foi possivel salvar contato!n" + 
-				e.getLocalizedMessage()
-			);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, 
-				"Formato inválido!n" + 
-				e.getLocalizedMessage()
-		);
+        char[] password = inputPassword.getPassword();
+        pass = String.valueOf(password);
+        String valueCPF = inputCPF.getText();
+        String valueNome = inputNome.getText();
+        String valueCarteira = inputCarteira.getText();
+        boolean valido = caf.validaCampos(this, valueCPF, valueCarteira, valueNome, pass);
+        if(valido) {
+            try {
+                caf.addAcionista(this,valueCPF , valueNome, valueCarteira,pass);
+                clearFields();
+                this.setVisible(false);
+                abreTelaLoginPosCadastro(valueCPF);
+            } catch (SQLException e) {
+                 //Testa se o CPF Já Existe na Base e Lança Exceção
+                if(e.toString().equalsIgnoreCase(
+                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueCPF + "' for key 'PRIMARY'")){
+                    JOptionPane.showMessageDialog(this, "O CPF " + valueCPF + " já foi cadastrado" + "\n" 
+                            + "Favor revisar as Informações", "Contato Já Salvo", JOptionPane.ERROR_MESSAGE);
+                    clearFields();
+                } 
+                else {
+                    JOptionPane.showMessageDialog(this, "Nao foi possivel salvar contato!" + "\n" + e.getLocalizedMessage());
+                }
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(this, "Formato inválido!" + "\n" + e.getLocalizedMessage());
+            }
         }
     }//GEN-LAST:event_onClickAddUser
 
@@ -184,6 +196,15 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
         this.setVisible(false);
         abreTelaLogin();
     }//GEN-LAST:event_cancelBtnActionPerformed
+
+    private void inputCarteiraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputCarteiraKeyReleased
+        try {
+            int number = Integer.parseInt(this.inputCarteira.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(rootPane, "Somente Números Permitidos");
+            this.inputCarteira.setText("");
+        }
+    }//GEN-LAST:event_inputCarteiraKeyReleased
     
     private void clearFields() {
         inputCPF.setText("");
@@ -192,7 +213,7 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
         inputPassword.setText("");
     }
     
-    private MaskFormatter setMascara(String mascara){
+     private MaskFormatter setMascara(String mascara){
         MaskFormatter mask = null;
         try{
             mask = new MaskFormatter(mascara);                      
@@ -204,6 +225,13 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
         TelaLogin tl = new TelaLogin();
         tl.setVisible(true);
     }
+    
+    private void abreTelaLoginPosCadastro(String cpf) {
+        TelaLogin tl = new TelaLogin(cpf);
+        tl.setVisible(true);
+    }
+    
+    
 
     /**
      * @param args the command line arguments

@@ -8,21 +8,28 @@ package view.controladorAtivosFinanceiros;
 import controller.controladorAtivosFinanceiros.ControladorAtivosFinaceirosController;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
+import model.controladorAtivosFinanceiros.Acionista;
 
 /**
  *
  * @author vapstor
  */
 public class TelaLogin extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form TelaLogin
      */
     public TelaLogin() {
         initComponents();
+    }
+
+    TelaLogin(String cpf) {
+        this.inputCPF.setText(cpf);
     }
 
     /**
@@ -43,18 +50,12 @@ public class TelaLogin extends javax.swing.JFrame {
         panelActions = new javax.swing.JPanel();
         novoUsuarioBtn = new javax.swing.JButton();
         buscarUsuarioBtn = new javax.swing.JButton();
-        removerUsuarioBtn = new javax.swing.JButton();
+        quitBtn = new javax.swing.JButton();
         loginBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Bem vindo!"));
-
-        inputCPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputCPFActionPerformed(evt);
-            }
-        });
 
         labelCPF.setText("CPF:");
 
@@ -62,12 +63,6 @@ public class TelaLogin extends javax.swing.JFrame {
         titulo.setText("Login");
 
         labelPassword.setText("Senha:");
-
-        inputPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputPasswordActionPerformed(evt);
-            }
-        });
 
         novoUsuarioBtn.setText("Novo usuário");
         novoUsuarioBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -77,11 +72,16 @@ public class TelaLogin extends javax.swing.JFrame {
         });
 
         buscarUsuarioBtn.setText("Buscar usuário");
-
-        removerUsuarioBtn.setText("Remover usuário");
-        removerUsuarioBtn.addActionListener(new java.awt.event.ActionListener() {
+        buscarUsuarioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removerUsuarioBtnActionPerformed(evt);
+                buscarUsuarioBtnActionPerformed(evt);
+            }
+        });
+
+        quitBtn.setText("Sair");
+        quitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitBtnActionPerformed(evt);
             }
         });
 
@@ -103,8 +103,8 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addComponent(buscarUsuarioBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(loginBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(removerUsuarioBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)))
+                    .addComponent(loginBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                    .addComponent(quitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         panelActionsLayout.setVerticalGroup(
             panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,7 +115,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGroup(panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(novoUsuarioBtn)
                     .addComponent(buscarUsuarioBtn)
-                    .addComponent(removerUsuarioBtn))
+                    .addComponent(quitBtn))
                 .addGap(5, 5, 5))
         );
 
@@ -179,68 +179,70 @@ public class TelaLogin extends javax.swing.JFrame {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
         String pass;
+        Acionista acionista = null;
         try {
             char[] password = inputPassword.getPassword();
             pass = String.valueOf(password);
             String valueCPF = inputCPF.getText();
             boolean isLogged = caf.autenticaUser(valueCPF, pass);
             if(!isLogged) {
-                 JOptionPane.showMessageDialog(null, "Senha Incorreta" 
+                 JOptionPane.showMessageDialog(this, "Senha ou Usuário Incorreto" 
                         + "\n"
-                        + "Favor revisar as Informações", "Senha Incorreta", JOptionPane.ERROR_MESSAGE);
+                        + "Favor revisar as Informações", "Dados Incorretos", JOptionPane.ERROR_MESSAGE);
             } else {
+                acionista = caf.findByCPF(valueCPF);
                 this.setVisible(false);
-                abreTelaInicialLogado(valueCPF);
+                abreTelaInicialLogado(acionista);
             }
             
         } catch (SQLException e) {
-            
-            //Testa se O CPF Já Existe na Base e Lança Exceção
-            if(e.toString().equalsIgnoreCase(
-                "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"
-                + inputCPF.getText() + 
-                "' for key 'PRIMARY'"))
-            {
-                JOptionPane.showMessageDialog(null, "O CPF " + inputCPF.getText() + " já foi cadastrado" + "\n" 
-                        + "Favor revisar as Informações", "Contato Já Salvo", JOptionPane.ERROR_MESSAGE);
-                clearFields();
-            } 
-            
-            else {
-                JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this, 
                                     "Nao foi possivel salvar contato!"+ "\n" + 
                                     e.getLocalizedMessage()
                             );
-            }
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, 
-				"Formato inválido!n" + 
+				"Formato inválido!" + "\n" + 
 				e.getLocalizedMessage()
 		);
         }
     }//GEN-LAST:event_loginBtnActionPerformed
-
-    private void inputPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputPasswordActionPerformed
 
     private void novoUsuarioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoUsuarioBtnActionPerformed
         this.setVisible(false);
         TelaAdicionarAcionista();
     }//GEN-LAST:event_novoUsuarioBtnActionPerformed
 
-    private void inputCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputCPFActionPerformed
+    private void buscarUsuarioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarUsuarioBtnActionPerformed
+        String valueCPF = (JOptionPane.showInputDialog(this, 
+                "Digite o CPF Para Consulta: ", 
+                "Consulta por CPF", 
+                JOptionPane.PLAIN_MESSAGE, null, null, 
+                "Digite no Formato xxx.xxx.xxx-xx")).toString();
+        try {
+            if(valueCPF.length() != 14) {
+                JOptionPane.showMessageDialog(this, "Confira os dados! (xxx.xxx.xxx-xx)","Erro de Formatação", JOptionPane.ERROR_MESSAGE);
+            } else {
+                ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
+                Acionista acionista = caf.findByCPF(valueCPF);
+                this.setVisible(false);
+                abreTelaPerfilAcionista(acionista);
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                                    "Nao foi possivel encontrar o contato!"+ "\n" + 
+                                    e.getLocalizedMessage()
+                            );
+        }
+    }//GEN-LAST:event_buscarUsuarioBtnActionPerformed
 
-    private void removerUsuarioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerUsuarioBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_removerUsuarioBtnActionPerformed
-    
-    private void clearFields() {
-           inputCPF.setText("");
-           inputPassword.setText("");
-    }
+    private void quitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitBtnActionPerformed
+        int dialogButton = JOptionPane.showConfirmDialog(this, "Você realmente deseja sair?", "Sair", JOptionPane.YES_NO_OPTION);
+        if(dialogButton == JOptionPane.YES_OPTION) {
+            System.exit(1);
+        }
+    }//GEN-LAST:event_quitBtnActionPerformed
     
     private MaskFormatter setMascara(String mascara){
         MaskFormatter mask = null;
@@ -257,11 +259,17 @@ public class TelaLogin extends javax.swing.JFrame {
     }
     
     
-    private void abreTelaInicialLogado(String CPF) {
+    private void abreTelaInicialLogado(Acionista acionistaLogado) {
         TelaInicialLogado telaLogado = new TelaInicialLogado();
+        telaLogado.recebeAcionista(acionistaLogado);
         telaLogado.setVisible(true);
     }
 
+    private void abreTelaPerfilAcionista(Acionista acionista) {
+        TelaPerfilAcionista perfilAcionista = new TelaPerfilAcionista();
+        perfilAcionista.recebeAcionista(acionista);
+        perfilAcionista.setVisible(true);
+    }
     
     /**
      * @param args the command line arguments
@@ -308,9 +316,11 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JButton novoUsuarioBtn;
     private javax.swing.JPanel panelActions;
     private javax.swing.JPanel panelPrincipal;
-    private javax.swing.JButton removerUsuarioBtn;
+    private javax.swing.JButton quitBtn;
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
+
+    
 
     
 }

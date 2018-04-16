@@ -130,6 +130,9 @@
             <Component class="javax.swing.JTextField" name="inputNome">
             </Component>
             <Component class="javax.swing.JTextField" name="inputCarteira">
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="inputCarteiraKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="labelCPF">
               <Properties>

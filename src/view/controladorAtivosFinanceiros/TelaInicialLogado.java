@@ -5,9 +5,12 @@
  */
 package view.controladorAtivosFinanceiros;
 
+import javax.swing.JOptionPane;
+import model.controladorAtivosFinanceiros.Acionista;
+
 /**
  *
- * @author Matheus
+ * @author vapstor
  */
 public class TelaInicialLogado extends javax.swing.JFrame {
 
@@ -103,6 +106,11 @@ public class TelaInicialLogado extends javax.swing.JFrame {
         });
 
         logOutBtn.setText("Logout");
+        logOutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOutBtnActionPerformed(evt);
+            }
+        });
 
         comprarAcaoBtn1.setText("Comprar Ações");
         comprarAcaoBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -136,13 +144,13 @@ public class TelaInicialLogado extends javax.swing.JFrame {
                 .addComponent(venderAcaoBtn)
                 .addGap(18, 18, 18)
                 .addComponent(comprarAcaoBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addComponent(logOutBtn))
         );
 
-        tituloInfo.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
+        tituloInfo.setFont(new java.awt.Font("Ubuntu", 2, 16)); // NOI18N
         tituloInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tituloInfo.setText("Seja Bem Vindo");
+        tituloInfo.setText("Seja Bem Vindo,");
 
         valueCPF.setFont(new java.awt.Font("Ubuntu", 2, 15)); // NOI18N
         valueCPF.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -162,8 +170,7 @@ public class TelaInicialLogado extends javax.swing.JFrame {
         valueSaldo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         valueSaldo.setText("+valorSaldo");
 
-        nomeAcionista.setFont(new java.awt.Font("Ubuntu", 2, 14)); // NOI18N
-        nomeAcionista.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nomeAcionista.setFont(new java.awt.Font("Ubuntu", 2, 16)); // NOI18N
         nomeAcionista.setText("+nome");
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
@@ -172,30 +179,30 @@ public class TelaInicialLogado extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfoLayout.createSequentialGroup()
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tituloInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nomeAcionista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelInfoLayout.createSequentialGroup()
-                                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelCarteira)
-                                    .addComponent(labelSaldo)
-                                    .addComponent(labelCPF))
-                                .addGap(18, 18, 18)
-                                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(valueSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(valueCPF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                                    .addComponent(valueCarteira, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                            .addComponent(labelCarteira)
+                            .addComponent(labelSaldo)
+                            .addComponent(labelCPF))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(valueSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(valueCPF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(valueCarteira, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(tituloInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(nomeAcionista, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelInfoLayout.setVerticalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfoLayout.createSequentialGroup()
-                .addComponent(tituloInfo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(nomeAcionista, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tituloInfo)
+                    .addComponent(nomeAcionista, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelCPF)
                     .addComponent(valueCPF))
@@ -219,8 +226,8 @@ public class TelaInicialLogado extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(panelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -255,6 +262,29 @@ public class TelaInicialLogado extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_valorCarteiraBtnActionPerformed
 
+    private void logOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutBtnActionPerformed
+        int dialogButton = JOptionPane.showConfirmDialog(this, "Você realmente deseja se desconectar?", "Logout", JOptionPane.YES_NO_OPTION);
+        if(dialogButton == JOptionPane.YES_OPTION) {
+            this.acionistaLogado = null;
+            this.setVisible(false);
+            abreTelaLogin();
+        }
+    }//GEN-LAST:event_logOutBtnActionPerformed
+
+    void recebeAcionista(Acionista acionistaLogado) {
+        this.acionistaLogado = acionistaLogado;
+        this.nomeAcionista.setText(this.acionistaLogado.getNome()+"!");
+        this.valueCPF.setText(this.acionistaLogado.getCPF());
+        this.valueCarteira.setText(String.valueOf(this.acionistaLogado.getCarteira()));
+        //valueSaldo.setText(String.valueOf(acionistaLogado.getSaldo));
+    }
+    
+    private void abreTelaLogin() {
+        TelaLogin tl = new TelaLogin();
+        tl.setVisible(true);
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -311,4 +341,7 @@ public class TelaInicialLogado extends javax.swing.JFrame {
     private javax.swing.JLabel valueSaldo;
     private javax.swing.JButton venderAcaoBtn;
     // End of variables declaration//GEN-END:variables
+    private Acionista acionistaLogado;
+
+    
 }

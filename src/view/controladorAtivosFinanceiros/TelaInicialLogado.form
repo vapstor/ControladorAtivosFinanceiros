@@ -27,9 +27,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="panelTitulo" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="panelInfo" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="panelInfo" min="-2" pref="432" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="panelActions" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -129,7 +129,7 @@
                   <Component id="venderAcaoBtn" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="comprarAcaoBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="39" max="32767" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
                   <Component id="logOutBtn" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -167,6 +167,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Logout"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logOutBtnActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="comprarAcaoBtn1">
           <Properties>
@@ -186,25 +189,24 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="tituloInfo" alignment="1" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="nomeAcionista" max="32767" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="labelCarteira" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="labelSaldo" min="-2" max="-2" attributes="0"/>
-                                      <Component id="labelCPF" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="valueSaldo" max="32767" attributes="0"/>
-                                      <Component id="valueCPF" alignment="1" pref="317" max="32767" attributes="0"/>
-                                      <Component id="valueCarteira" alignment="1" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="labelCarteira" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelSaldo" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelCPF" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="valueSaldo" max="32767" attributes="0"/>
+                              <Component id="valueCPF" alignment="1" max="32767" attributes="0"/>
+                              <Component id="valueCarteira" alignment="1" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="tituloInfo" min="-2" pref="126" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="nomeAcionista" min="-2" pref="351" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -214,10 +216,11 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="tituloInfo" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="nomeAcionista" min="-2" pref="34" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="tituloInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nomeAcionista" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="labelCPF" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="valueCPF" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -241,10 +244,10 @@
         <Component class="javax.swing.JLabel" name="tituloInfo">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Ubuntu" size="16" style="0"/>
+              <Font name="Ubuntu" size="16" style="2"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Seja Bem Vindo"/>
+            <Property name="text" type="java.lang.String" value="Seja Bem Vindo,"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="valueCPF">
@@ -292,9 +295,8 @@
         <Component class="javax.swing.JLabel" name="nomeAcionista">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Ubuntu" size="14" style="2"/>
+              <Font name="Ubuntu" size="16" style="2"/>
             </Property>
-            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="+nome"/>
           </Properties>
         </Component>

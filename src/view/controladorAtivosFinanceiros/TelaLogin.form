@@ -100,9 +100,6 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JFormattedTextField" name="inputCPF">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputCPFActionPerformed"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JFormattedTextField(setMascara(&quot;###.###.###-##&quot;));"/>
           </AuxValues>
@@ -126,9 +123,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="inputPassword">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputPasswordActionPerformed"/>
-          </Events>
         </Component>
         <Container class="javax.swing.JPanel" name="panelActions">
 
@@ -141,8 +135,8 @@
                       <Component id="buscarUsuarioBtn" pref="136" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="loginBtn" alignment="1" max="32767" attributes="0"/>
-                          <Component id="removerUsuarioBtn" pref="149" max="32767" attributes="0"/>
+                          <Component id="loginBtn" alignment="1" pref="149" max="32767" attributes="0"/>
+                          <Component id="quitBtn" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -156,7 +150,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="novoUsuarioBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="buscarUsuarioBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="removerUsuarioBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="quitBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -176,13 +170,16 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Buscar usu&#xe1;rio"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buscarUsuarioBtnActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="removerUsuarioBtn">
+            <Component class="javax.swing.JButton" name="quitBtn">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Remover usu&#xe1;rio"/>
+                <Property name="text" type="java.lang.String" value="Sair"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removerUsuarioBtnActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="quitBtnActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="loginBtn">
