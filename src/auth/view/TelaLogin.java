@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.controladorAtivosFinanceiros;
+package auth.view;
 
-import controller.controladorAtivosFinanceiros.ControladorAtivosFinaceirosController;
+import acoes.view.Acoes;
+import acionistas.controller.AcionistasController;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
-import model.controladorAtivosFinanceiros.Acionista;
+import acionistas.model.Acionista;
+import acoes.model.Carteira;
 
 /**
  *
@@ -29,6 +30,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }
 
     TelaLogin(String cpf) {
+        initComponents();
         this.inputCPF.setText(cpf);
     }
 
@@ -63,6 +65,12 @@ public class TelaLogin extends javax.swing.JFrame {
         titulo.setText("Login");
 
         labelPassword.setText("Senha:");
+
+        inputPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                inputPasswordKeyPressed(evt);
+            }
+        });
 
         novoUsuarioBtn.setText("Novo usuário");
         novoUsuarioBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -177,14 +185,15 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
+        AcionistasController caf = new AcionistasController();
         String pass;
-        Acionista acionista = null;
+        Acionista acionista;
         try {
             char[] password = inputPassword.getPassword();
             pass = String.valueOf(password);
             String valueCPF = inputCPF.getText();
             boolean isLogged = caf.autenticaUser(valueCPF, pass);
+            
             if(!isLogged) {
                  JOptionPane.showMessageDialog(this, "Senha ou Usuário Incorreto" 
                         + "\n"
@@ -193,11 +202,10 @@ public class TelaLogin extends javax.swing.JFrame {
                 acionista = caf.findByCPF(valueCPF);
                 this.setVisible(false);
                 abreTelaInicialLogado(acionista);
-            }
-            
+            }            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                                    "Nao foi possivel salvar contato!"+ "\n" + 
+                                    "Nao foi possivel se Logar!"+ "\n" + 
                                     e.getLocalizedMessage()
                             );
         } catch (ParseException e) {
@@ -223,7 +231,7 @@ public class TelaLogin extends javax.swing.JFrame {
             if(valueCPF.length() != 14) {
                 JOptionPane.showMessageDialog(this, "Confira os dados! (xxx.xxx.xxx-xx)","Erro de Formatação", JOptionPane.ERROR_MESSAGE);
             } else {
-                ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
+                AcionistasController caf = new AcionistasController();
                 Acionista acionista = caf.findByCPF(valueCPF);
                 this.setVisible(false);
                 abreTelaPerfilAcionista(acionista);
@@ -243,6 +251,13 @@ public class TelaLogin extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_quitBtnActionPerformed
+
+    private void inputPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputPasswordKeyPressed
+        if(evt.getKeyChar()==KeyEvent.VK_ENTER) {
+           loginBtnActionPerformed(null);
+        }
+    }//GEN-LAST:event_inputPasswordKeyPressed
+
     
     private MaskFormatter setMascara(String mascara){
         MaskFormatter mask = null;
@@ -259,15 +274,13 @@ public class TelaLogin extends javax.swing.JFrame {
     }
     
     
-    private void abreTelaInicialLogado(Acionista acionistaLogado) {
-        TelaInicialLogado telaLogado = new TelaInicialLogado();
-        telaLogado.recebeAcionista(acionistaLogado);
+    private void abreTelaInicialLogado(Acionista acionistaLogado) throws SQLException {
+        Acoes telaLogado = new Acoes(acionistaLogado);
         telaLogado.setVisible(true);
     }
 
     private void abreTelaPerfilAcionista(Acionista acionista) {
-        TelaPerfilAcionista perfilAcionista = new TelaPerfilAcionista();
-        perfilAcionista.recebeAcionista(acionista);
+        TelaPerfilAcionista perfilAcionista = new TelaPerfilAcionista(acionista);
         perfilAcionista.setVisible(true);
     }
     

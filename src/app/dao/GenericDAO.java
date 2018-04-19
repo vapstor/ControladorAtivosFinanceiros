@@ -1,4 +1,4 @@
-package dao.controladorAtivosFinanceiros;
+package app.dao;
 /**
  *
  * @author vapstor

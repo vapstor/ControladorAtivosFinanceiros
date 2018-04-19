@@ -3,22 +3,103 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.controladorAtivosFinanceiros;
+package acoes.view;
 
+import acoes.controller.AcoesController;
+import acionistas.controller.AcionistasController;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import model.controladorAtivosFinanceiros.Acionista;
+import javax.swing.table.DefaultTableModel;
+import acionistas.model.Acionista;
+import acoes.model.Carteira;
+import auth.view.TelaLogin;
+import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 
 /**
  *
  * @author vapstor
  */
-public class TelaInicialLogado extends javax.swing.JFrame {
-
+public class Acoes extends javax.swing.JFrame {
+    private final AcoesController ac;
+    private Acionista acionistaLogado = null;
+    private Carteira carteiraAcionistaLogado = null;
+    ArrayList<ArrayList<String>> CurrentTableData;
+    Icon icon = new ImageIcon("");
+   
     /**
-     * Creates new form TelaInicial
+     * Creates new form Acoes
+     * @param acionista
      */
-    public TelaInicialLogado() {
+    public Acoes(Acionista acionista) throws SQLException {
+        this.ac = new AcoesController(acionista);
+        this.acionistaLogado = acionista;
+        this.carteiraAcionistaLogado = ac.getCarteira();
+        this.CurrentTableData = ac.getTableData();
+        
         initComponents();
+        preencheCampos();
+        try {
+            Image img = ImageIO.read(getClass().getResource("refreshIcon.png"));
+            btnRefresh.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        
+    }
+    
+    //atualizar a cada insert ou delete
+    public void atualizaTabela() {
+        ArrayList<ArrayList<String>> newTableData = null;
+        try {
+            newTableData = ac.getTableData();
+        } catch (SQLException ex) {
+            System.out.println("erro:" + ex);
+        }
+        DefaultTableModel dtm = new DefaultTableModel(0, 0);
+        String header[] = new String[] {"Acão", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
+        dtm.setColumnIdentifiers(header);
+        tabelaAcoes.setModel(dtm);
+        // add row dynamically into the table      
+        for (int i = 0; i < newTableData.size(); i++) {
+            dtm.addRow(new Object[] { 
+                newTableData.get(i).get(0), 
+                newTableData.get(i).get(1), 
+                newTableData.get(i).get(2), 
+                newTableData.get(i).get(3) 
+            });
+        }
+        int x = tabelaAcoes.getSelectedRow();
+        System.out.println(x);
+        int y = tabelaAcoes.getSelectedColumn();
+        System.out.println(y);
+    }
+    
+    public void incrementaSaldo(double valor) throws SQLException {
+        double novoSaldo = ac.adicionaDinheiro(this.acionistaLogado.getCarteira(), valor);
+        atualizaSaldo(novoSaldo);
+    }
+    
+    public void decrementaSaldo(double valor) throws SQLException, Exception {
+        double novoSaldo = ac.diminuiDinheiro(this.acionistaLogado.getCarteira(), valor);
+        atualizaSaldo(novoSaldo);
+    }
+    
+    public void atualizaSaldo (double novoSaldo){
+//        try {
+//            System.out.println("atualizando Saldo" + ac.getCarteira().getSaldo());
+            
+//            this.valueSaldo.setText(String.valueOf(ac.getCarteira().getSaldo()));
+            this.valueSaldo.setText(String.valueOf(novoSaldo));
+//        } catch (SQLException e) {
+//            System.out.println("Erro: " + e);
+//        }
     }
 
     /**
@@ -30,24 +111,40 @@ public class TelaInicialLogado extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         panelTitulo = new javax.swing.JPanel();
         titulo = new javax.swing.JLabel();
         subTitulo = new javax.swing.JLabel();
         panelActions = new javax.swing.JPanel();
-        comprarAcaoBtn = new javax.swing.JButton();
+        excluirContaBtn = new javax.swing.JButton();
         venderAcaoBtn = new javax.swing.JButton();
-        valorCarteiraBtn = new javax.swing.JButton();
-        comprarAcaoBtn1 = new javax.swing.JButton();
+        adicionaSaldoBtn = new javax.swing.JButton();
+        comprarAcaoBtn = new javax.swing.JButton();
         logOutBtn = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        inputBuyAcao = new javax.swing.JTextField();
+        inputSoldAcao = new javax.swing.JTextField();
+        labelSaldo = new javax.swing.JLabel();
+        retiraSaldoBtn = new javax.swing.JButton();
+        inputEditSaldo = new javax.swing.JTextField();
+        valueSaldo = new javax.swing.JLabel();
         panelInfo = new javax.swing.JPanel();
         tituloInfo = new javax.swing.JLabel();
+        panelLista = new javax.swing.JPanel();
+        panelScrolldaLista = new javax.swing.JScrollPane();
+        tabelaAcoes = new javax.swing.JTable();
+        tituloPanelLista = new javax.swing.JLabel();
+        btnRefresh = new javax.swing.JButton(this.icon);
+        valueNome = new javax.swing.JLabel();
         valueCPF = new javax.swing.JLabel();
-        labelCPF = new javax.swing.JLabel();
         valueCarteira = new javax.swing.JLabel();
         labelCarteira = new javax.swing.JLabel();
-        labelSaldo = new javax.swing.JLabel();
-        valueSaldo = new javax.swing.JLabel();
-        nomeAcionista = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+
+        jButton2.setText("jButton2");
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,11 +178,11 @@ public class TelaInicialLogado extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        comprarAcaoBtn.setText("Alterar Senha");
-        comprarAcaoBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        comprarAcaoBtn.addActionListener(new java.awt.event.ActionListener() {
+        excluirContaBtn.setText("Excluir Conta");
+        excluirContaBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        excluirContaBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comprarAcaoBtnActionPerformed(evt);
+                excluirContaBtnActionPerformed(evt);
             }
         });
 
@@ -97,19 +194,19 @@ public class TelaInicialLogado extends javax.swing.JFrame {
             }
         });
 
-        valorCarteiraBtn.setText("Valor da Carteira");
-        valorCarteiraBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        valorCarteiraBtn.addActionListener(new java.awt.event.ActionListener() {
+        adicionaSaldoBtn.setText("Adicionar Saldo");
+        adicionaSaldoBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        adicionaSaldoBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                valorCarteiraBtnActionPerformed(evt);
+                adicionaSaldoBtnActionPerformed(evt);
             }
         });
 
-        comprarAcaoBtn1.setText("Comprar Ações");
-        comprarAcaoBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        comprarAcaoBtn1.addActionListener(new java.awt.event.ActionListener() {
+        comprarAcaoBtn.setText("Comprar Ações");
+        comprarAcaoBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        comprarAcaoBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comprarAcaoBtn1ActionPerformed(evt);
+                comprarAcaoBtnActionPerformed(evt);
             }
         });
 
@@ -120,6 +217,52 @@ public class TelaInicialLogado extends javax.swing.JFrame {
             }
         });
 
+        inputBuyAcao.setFont(new java.awt.Font("Ubuntu Light", 2, 15)); // NOI18N
+        inputBuyAcao.setText("Ações a serem compradas...");
+        inputBuyAcao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputBuyAcaoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputBuyAcaoFocusLost(evt);
+            }
+        });
+
+        inputSoldAcao.setFont(new java.awt.Font("Ubuntu Light", 2, 15)); // NOI18N
+        inputSoldAcao.setText("Ações a serem vendidas...");
+        inputSoldAcao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputSoldAcaoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputSoldAcaoFocusLost(evt);
+            }
+        });
+
+        labelSaldo.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        labelSaldo.setText("Saldo:");
+
+        retiraSaldoBtn.setText("Retirar Saldo");
+        retiraSaldoBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        retiraSaldoBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retiraSaldoBtnActionPerformed(evt);
+            }
+        });
+
+        inputEditSaldo.setFont(new java.awt.Font("Ubuntu Light", 2, 15)); // NOI18N
+        inputEditSaldo.setText("Insira o valor...");
+        inputEditSaldo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputEditSaldoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputEditSaldoFocusLost(evt);
+            }
+        });
+
+        valueSaldo.setText("+saldo");
+
         javax.swing.GroupLayout panelActionsLayout = new javax.swing.GroupLayout(panelActions);
         panelActions.setLayout(panelActionsLayout);
         panelActionsLayout.setHorizontalGroup(
@@ -127,97 +270,162 @@ public class TelaInicialLogado extends javax.swing.JFrame {
             .addGroup(panelActionsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(valorCarteiraBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(comprarAcaoBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(venderAcaoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(comprarAcaoBtn1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inputEditSaldo)
+                    .addComponent(excluirContaBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelActionsLayout.createSequentialGroup()
-                        .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 2, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(adicionaSaldoBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(retiraSaldoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
+                    .addComponent(venderAcaoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(comprarAcaoBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inputBuyAcao)
+                    .addComponent(inputSoldAcao)
+                    .addComponent(jSeparator2)
+                    .addGroup(panelActionsLayout.createSequentialGroup()
+                        .addComponent(labelSaldo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(valueSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(logOutBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelActionsLayout.setVerticalGroup(
             panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelActionsLayout.createSequentialGroup()
-                .addComponent(comprarAcaoBtn1)
-                .addGap(18, 18, 18)
-                .addComponent(valorCarteiraBtn)
-                .addGap(18, 18, 18)
-                .addComponent(venderAcaoBtn)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelSaldo)
+                    .addComponent(valueSaldo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(inputEditSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(adicionaSaldoBtn)
+                    .addComponent(retiraSaldoBtn))
+                .addGap(27, 27, 27)
+                .addComponent(inputBuyAcao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comprarAcaoBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(inputSoldAcao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(venderAcaoBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(excluirContaBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        tituloInfo.setFont(new java.awt.Font("Ubuntu", 2, 16)); // NOI18N
+        tituloInfo.setFont(new java.awt.Font("Ubuntu", 3, 16)); // NOI18N
         tituloInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tituloInfo.setText("Seja Bem Vindo,");
+        tituloInfo.setText("Bem Vindo,");
 
-        valueCPF.setFont(new java.awt.Font("Ubuntu", 2, 15)); // NOI18N
-        valueCPF.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        valueCPF.setText("xxx.xxx.xxx-xx");
+        DefaultTableModel dtm = new DefaultTableModel(0, 0);
+        String header[] = new String[] {"Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
+        dtm.setColumnIdentifiers(header);
+        tabelaAcoes.setModel(dtm);
+        // add row dynamically into the table
+        for (int i = 0; i < CurrentTableData.size(); i++) {
+            dtm.addRow(new Object[] {
+                this.CurrentTableData.get(i).get(0),
+                this.CurrentTableData.get(i).get(1),
+                this.CurrentTableData.get(i).get(2),
+                this.CurrentTableData.get(i).get(3)
+            });
+        }
+        tabelaAcoes.setModel(dtm);
+        tabelaAcoes.setColumnSelectionAllowed(true);
+        panelScrolldaLista.setViewportView(tabelaAcoes);
+        tabelaAcoes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        labelCPF.setText("CPF:");
+        tituloPanelLista.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
+        tituloPanelLista.setText("Histórico de transações:");
 
-        valueCarteira.setFont(new java.awt.Font("Ubuntu", 2, 15)); // NOI18N
-        valueCarteira.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        valueCarteira.setText("+nCarteira");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
-        labelCarteira.setText("Nº Carteira:");
+        javax.swing.GroupLayout panelListaLayout = new javax.swing.GroupLayout(panelLista);
+        panelLista.setLayout(panelListaLayout);
+        panelListaLayout.setHorizontalGroup(
+            panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelListaLayout.createSequentialGroup()
+                        .addComponent(tituloPanelLista)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelListaLayout.createSequentialGroup()
+                        .addComponent(panelScrolldaLista, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 28, Short.MAX_VALUE))))
+        );
+        panelListaLayout.setVerticalGroup(
+            panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tituloPanelLista)
+                .addGap(18, 18, 18)
+                .addComponent(panelScrolldaLista, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelListaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(143, 143, 143))
+        );
 
-        labelSaldo.setText("Saldo:");
+        valueNome.setText("+nome");
 
-        valueSaldo.setFont(new java.awt.Font("Ubuntu", 2, 15)); // NOI18N
-        valueSaldo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        valueSaldo.setText("+valorSaldo");
+        valueCPF.setText("XXXX");
 
-        nomeAcionista.setFont(new java.awt.Font("Ubuntu", 2, 16)); // NOI18N
-        nomeAcionista.setText("+nome");
+        valueCarteira.setText("+carteira");
+
+        labelCarteira.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        labelCarteira.setText("Carteira:");
+
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel1.setText("CPF:");
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
         panelInfo.setLayout(panelInfoLayout);
         panelInfoLayout.setHorizontalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfoLayout.createSequentialGroup()
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelCarteira)
-                            .addComponent(labelSaldo)
-                            .addComponent(labelCPF))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(valueCarteira, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(valueCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                            .addComponent(valueSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(53, 53, 53))
-                    .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(tituloInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 25, Short.MAX_VALUE)
-                        .addComponent(nomeAcionista, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(tituloInfo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(valueNome, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(valueCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelCarteira)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(valueCarteira, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+            .addGroup(panelInfoLayout.createSequentialGroup()
+                .addComponent(panelLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panelInfoLayout.setVerticalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfoLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tituloInfo)
-                    .addComponent(nomeAcionista, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelCPF)
-                    .addComponent(valueCPF))
-                .addGap(18, 18, 18)
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(valueNome)
+                    .addComponent(valueCPF)
+                    .addComponent(valueCarteira)
                     .addComponent(labelCarteira)
-                    .addComponent(valueCarteira))
-                .addGap(18, 18, 18)
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelSaldo)
-                    .addComponent(valueSaldo))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel1))
+                .addGap(12, 12, 12)
+                .addComponent(panelLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -229,10 +437,10 @@ public class TelaInicialLogado extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(panelTitulo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                        .addComponent(panelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,31 +450,48 @@ public class TelaInicialLogado extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(46, 46, 46))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(panelActions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(46, 46, 46))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comprarAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comprarAcaoBtnActionPerformed
+    private void excluirContaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirContaBtnActionPerformed
+        int dialogButton = JOptionPane.showConfirmDialog(this, "Você realmente deseja excluir sua conta?", "Deletar Conta", JOptionPane.YES_NO_OPTION);
+        if(dialogButton == JOptionPane.YES_OPTION) {
+            AcionistasController caf = new AcionistasController();
+            try {
+                caf.excluir(this.acionistaLogado.getCPF());
+                this.acionistaLogado = null;
+                this.setVisible(false);
+                abreTelaLogin();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao deletar" + "\n" + e);
+            }
+            
+        }
+    }//GEN-LAST:event_excluirContaBtnActionPerformed
 
     private void venderAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venderAcaoBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_venderAcaoBtnActionPerformed
 
-    private void comprarAcaoBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtn1ActionPerformed
+    private void comprarAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_comprarAcaoBtn1ActionPerformed
+    }//GEN-LAST:event_comprarAcaoBtnActionPerformed
 
-    private void valorCarteiraBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorCarteiraBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_valorCarteiraBtnActionPerformed
+    private void adicionaSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaSaldoBtnActionPerformed
+        try {
+            incrementaSaldo(Double.parseDouble(this.inputEditSaldo.getText()));
+            JOptionPane.showMessageDialog(panelActions, "Saldo Atualizado!", "Atualização de Saldo", JOptionPane.PLAIN_MESSAGE);
+        } catch (SQLException ex) {
+            Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_adicionaSaldoBtnActionPerformed
 
     private void logOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutBtnActionPerformed
         int dialogButton = JOptionPane.showConfirmDialog(this, "Você realmente deseja se desconectar?", "Logout", JOptionPane.YES_NO_OPTION);
@@ -277,12 +502,64 @@ public class TelaInicialLogado extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_logOutBtnActionPerformed
 
-    void recebeAcionista(Acionista acionistaLogado) {
-        this.acionistaLogado = acionistaLogado;
-        this.nomeAcionista.setText(this.acionistaLogado.getNome()+"!");
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        atualizaTabela();
+//        atualizaSaldo();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void retiraSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retiraSaldoBtnActionPerformed
+         try {
+            decrementaSaldo(Double.parseDouble(this.inputEditSaldo.getText()));
+            JOptionPane.showMessageDialog(panelActions, "Saldo Atualizado!", "Atualização de Saldo", JOptionPane.PLAIN_MESSAGE);
+        } catch (SQLException ex) {
+            Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_retiraSaldoBtnActionPerformed
+
+    private void inputBuyAcaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputBuyAcaoFocusLost
+        if(inputBuyAcao.getText().equals("")){
+            inputBuyAcao.setText("Ações a serem compradas...");
+        }
+    }//GEN-LAST:event_inputBuyAcaoFocusLost
+
+    private void inputSoldAcaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputSoldAcaoFocusLost
+        if(inputSoldAcao.getText().equals("")){
+            inputSoldAcao.setText("Ações a serem vendidas...");    
+        }
+    }//GEN-LAST:event_inputSoldAcaoFocusLost
+
+    private void inputBuyAcaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputBuyAcaoFocusGained
+        if(inputBuyAcao.getText().equals("Ações a serem compradas...")){
+            inputBuyAcao.setText("");
+        }
+    }//GEN-LAST:event_inputBuyAcaoFocusGained
+
+    private void inputSoldAcaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputSoldAcaoFocusGained
+        if(inputSoldAcao.getText().equals("Ações a serem vendidas...")){
+            inputSoldAcao.setText("");
+        }
+    }//GEN-LAST:event_inputSoldAcaoFocusGained
+
+    private void inputEditSaldoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputEditSaldoFocusGained
+        if(inputEditSaldo.getText().equals("Insira o valor...")){
+            inputEditSaldo.setText("");
+        }
+    }//GEN-LAST:event_inputEditSaldoFocusGained
+
+    private void inputEditSaldoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputEditSaldoFocusLost
+        if(inputEditSaldo.getText().equals("")){
+            inputEditSaldo.setText("Insira o valor...");
+        }
+    }//GEN-LAST:event_inputEditSaldoFocusLost
+    
+    private void preencheCampos() {
+        this.valueNome.setText(this.acionistaLogado.getNome()); 
         this.valueCPF.setText(this.acionistaLogado.getCPF());
-        this.valueCarteira.setText(String.valueOf(this.acionistaLogado.getCarteira()));
-        //valueSaldo.setText(String.valueOf(acionistaLogado.getSaldo));
+//        this.valueSaldo.maxLength(5);
+        valueCarteira.setText(String.valueOf(this.carteiraAcionistaLogado.getID()));
+        valueSaldo.setText(String.valueOf(this.carteiraAcionistaLogado.getSaldo()));
     }
     
     private void abreTelaLogin() {
@@ -290,64 +567,38 @@ public class TelaInicialLogado extends javax.swing.JFrame {
         tl.setVisible(true);
     }
     
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaInicialLogado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaInicialLogado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaInicialLogado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaInicialLogado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaInicialLogado().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionaSaldoBtn;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton comprarAcaoBtn;
-    private javax.swing.JButton comprarAcaoBtn1;
-    private javax.swing.JLabel labelCPF;
+    private javax.swing.JButton excluirContaBtn;
+    private javax.swing.JTextField inputBuyAcao;
+    private javax.swing.JTextField inputEditSaldo;
+    private javax.swing.JTextField inputSoldAcao;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel labelCarteira;
     private javax.swing.JLabel labelSaldo;
     private javax.swing.JButton logOutBtn;
-    private javax.swing.JLabel nomeAcionista;
     private javax.swing.JPanel panelActions;
     private javax.swing.JPanel panelInfo;
+    private javax.swing.JPanel panelLista;
+    private javax.swing.JScrollPane panelScrolldaLista;
     private javax.swing.JPanel panelTitulo;
+    private javax.swing.JButton retiraSaldoBtn;
     private javax.swing.JLabel subTitulo;
+    private javax.swing.JTable tabelaAcoes;
     private javax.swing.JLabel titulo;
     private javax.swing.JLabel tituloInfo;
-    private javax.swing.JButton valorCarteiraBtn;
+    private javax.swing.JLabel tituloPanelLista;
     private javax.swing.JLabel valueCPF;
     private javax.swing.JLabel valueCarteira;
+    private javax.swing.JLabel valueNome;
     private javax.swing.JLabel valueSaldo;
     private javax.swing.JButton venderAcaoBtn;
     // End of variables declaration//GEN-END:variables
-    private Acionista acionistaLogado;
-
     
+     
 }

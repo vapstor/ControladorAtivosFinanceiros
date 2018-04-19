@@ -1,27 +1,32 @@
-package model.controladorAtivosFinanceiros;
+package acoes.model;
 
 /**
  *
  * @author vapstor
  */
 public class Carteira {
-    private double saldoCarteira;
-    private int nCarteira;
-
-    public double getSaldoCarteira() {
-        return saldoCarteira;
+    private double saldo;
+    private int id;
+    
+    public Carteira(int idCarteira, double saldoCarteira) {
+        this.id = idCarteira;
+        this.saldo = saldoCarteira;
+    }
+    
+    public int getID() {
+        return id;
     }
 
-    public void setSaldoCarteira(double saldoCarteira) {
-        this.saldoCarteira = saldoCarteira;
-    } 
-
-    public int getnCarteira() {
-        return nCarteira;
+    public void setID(int idCarteira) {
+        this.id = idCarteira;
+    }
+    
+    public double getSaldo() {
+        return saldo;
     }
 
-    public void setnCarteira(int nCarteira) {
-        this.nCarteira = nCarteira;
+    public void setSaldo(double saldoCarteira) {
+        this.saldo = saldoCarteira;
     }
     
 }

@@ -1,4 +1,4 @@
-package model.controladorAtivosFinanceiros;
+package acionistas.model;
 
 /**
  *
@@ -7,6 +7,13 @@ package model.controladorAtivosFinanceiros;
 public class Acionista {
     private String CPF, nome, password;
     private int carteira;
+
+    public Acionista(String CPF, String nome, int carteira, String password) {
+        this.CPF = CPF;
+        this.nome = nome;
+        this.carteira = carteira;
+        this.password = password;
+    }    
     
     public String getCPF() {
         return this.CPF;

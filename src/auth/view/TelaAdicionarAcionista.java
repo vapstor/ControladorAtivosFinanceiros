@@ -1,20 +1,22 @@
 
-package view.controladorAtivosFinanceiros;
-import controller.controladorAtivosFinanceiros.ControladorAtivosFinaceirosController;
+package auth.view;
+import auth.view.TelaLogin;
+import acionistas.controller.AcionistasController;
+import acoes.dao.CarteiraDAO;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
+import acoes.model.Carteira;
 /**
  *
  * @author vapstor
  */
 public class TelaAdicionarAcionista extends javax.swing.JFrame {
 
-    /**
-     * Creates new form telaTeste
-     */
     public TelaAdicionarAcionista() {
         initComponents();
     }
@@ -161,34 +163,65 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onClickAddUser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClickAddUser
-        ControladorAtivosFinaceirosController caf = new ControladorAtivosFinaceirosController();
+        AcionistasController ac = new AcionistasController();
+        CarteiraDAO cd = new CarteiraDAO();
+        
         String pass;
         char[] password = inputPassword.getPassword();
         pass = String.valueOf(password);
+        
         String valueCPF = inputCPF.getText();
         String valueNome = inputNome.getText();
-        String valueCarteira = inputCarteira.getText();
-        boolean valido = caf.validaCampos(this, valueCPF, valueCarteira, valueNome, pass);
+        int valueIdCarteira = Integer.parseInt(inputCarteira.getText());
+        
+        boolean valido = ac.validaCampos(this, valueCPF, valueNome, valueIdCarteira, pass);
+        
         if(valido) {
+            //tenta salvar o Acionista
             try {
-                caf.addAcionista(this,valueCPF , valueNome, valueCarteira,pass);
-                clearFields();
-                this.setVisible(false);
+                ac.addAcionista(this, valueCPF, valueNome, valueIdCarteira, pass);
+                ac.addCarteira(this, valueIdCarteira);
+                this.setVisible(false);   
                 abreTelaLoginPosCadastro(valueCPF);
-            } catch (SQLException e) {
-                 //Testa se o CPF Já Existe na Base e Lança Exceção
+            } catch (SQLException e ) {
+                 System.out.println("Erro SQL" + e);
+                //Testa se o CPF Já Existe na Base e Lança Exceção
                 if(e.toString().equalsIgnoreCase(
-                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueCPF + "' for key 'PRIMARY'")){
-                    JOptionPane.showMessageDialog(this, "O CPF " + valueCPF + " já foi cadastrado" + "\n" 
-                            + "Favor revisar as Informações", "Contato Já Salvo", JOptionPane.ERROR_MESSAGE);
-                    clearFields();
-                } 
-                else {
-                    JOptionPane.showMessageDialog(this, "Nao foi possivel salvar contato!" + "\n" + e.getLocalizedMessage());
+                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueCPF + "' for key 'PRIMARY'"))
+                    {
+                        JOptionPane.showMessageDialog(this, "O CPF " + valueCPF + " já foi cadastrado" + "\n" 
+                        + "Favor revisar as Informações", "CPF Já Salvo", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                //Teste Carteira Cadastrados
+                else if(e.toString().equalsIgnoreCase(
+                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueIdCarteira + "' for key 'PRIMARY'"))
+                        {
+                            JOptionPane.showMessageDialog(this, "A Carteira " + valueCPF + " já foi cadastrada" + "\n" 
+                            + "Favor revisar as Informações", "Carteira Já Salva", JOptionPane.ERROR_MESSAGE);
+                        }
+
+                //Teste CPF && Carteira Cadastrados
+                else if(e.toString().equalsIgnoreCase(
+                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueCPF+"-"+valueIdCarteira + "' for key 'PRIMARY'"))
+                {
+                    JOptionPane.showMessageDialog(this, "O CPF " + valueCPF + "\n"+ 
+                            "E a Carteira " + valueIdCarteira + "\n" +
+                            "já foram cadastrados" + "\n" 
+                            + "Favor revisar as Informações", "CPF e Carteira Já Salvos", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (ParseException e) {
-                JOptionPane.showMessageDialog(this, "Formato inválido!" + "\n" + e.getLocalizedMessage());
+                
+                else {
+                    JOptionPane.showMessageDialog(this, "Erro no BD!" + "\n" + e);
+                }
+
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaAdicionarAcionista.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Nao foi possível salvar contato!" + "\n" + ex.getLocalizedMessage());
             }
+                catch (Exception error){
+                    JOptionPane.showMessageDialog(this, "Erro!" + "\n" + error);
+                };
         }
     }//GEN-LAST:event_onClickAddUser
 
@@ -230,51 +263,6 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
         TelaLogin tl = new TelaLogin(cpf);
         tl.setVisible(true);
     }
-    
-    
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarAcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarAcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarAcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarAcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaAdicionarAcionista().setVisible(true);
-            }
-        });
-    }
-
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
