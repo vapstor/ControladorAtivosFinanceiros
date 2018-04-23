@@ -231,8 +231,8 @@ public class TelaLogin extends javax.swing.JFrame {
             if(valueCPF.length() != 14) {
                 JOptionPane.showMessageDialog(this, "Confira os dados! (xxx.xxx.xxx-xx)","Erro de Formatação", JOptionPane.ERROR_MESSAGE);
             } else {
-                AcionistasController caf = new AcionistasController();
-                Acionista acionista = caf.findByCPF(valueCPF);
+                AcionistasController ac = new AcionistasController();
+                Acionista acionista = ac.findByCPF(valueCPF);
                 this.setVisible(false);
                 abreTelaPerfilAcionista(acionista);
             }

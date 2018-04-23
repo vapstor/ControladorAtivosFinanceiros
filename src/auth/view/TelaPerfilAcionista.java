@@ -19,10 +19,11 @@ public class TelaPerfilAcionista extends javax.swing.JFrame {
      */
     public TelaPerfilAcionista(Acionista acionista) {
         this.acionista = acionista;
+        initComponents();
         this.valueNome.setText(this.acionista.getNome());
         this.valueCPF.setText(this.acionista.getCPF());
         this.valueCarteira.setText(String.valueOf(this.acionista.getCarteira()));
-        initComponents();
+        
     }
 
     /**

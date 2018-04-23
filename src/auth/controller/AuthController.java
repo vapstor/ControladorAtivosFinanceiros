@@ -19,6 +19,8 @@ public class AuthController {
     public boolean autenticador(String CPF, String Password) throws SQLException {
         String select = "SELECT Password FROM Acionistas WHERE CPF = ?";
         String passBD = null;
+        String userBD = null;
+        
         try (PreparedStatement stmt = getConnection().prepareStatement(select)) {
             stmt.setString(1, CPF);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -30,6 +32,10 @@ public class AuthController {
             if(Password.equals(passBD)) {
                 return true;
             }
+//            if(CPF.equals(userBD)) {
+//                JOptionPane.showMessageDialog(null, "CPF Já Cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+//                return false;
+//            }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Os campos não podem ser nulos!", "Erro", JOptionPane.ERROR_MESSAGE);
             return false;

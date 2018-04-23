@@ -14,13 +14,14 @@ import acoes.model.Carteira;
  */
 public class AcionistasController extends AcionistasDAO {
     
-    public void addCarteira(Component framePai, int idCarteira) throws SQLException, ParseException {
+    public void addCarteira(Component framePai, int idCarteira, String cpf) throws SQLException, ParseException {
         Carteira novaCarteira = new Carteira(idCarteira, 0.00);
         new CarteiraDAO().salvaCarteira(framePai, novaCarteira);
     }
     
     public void addAcionista(Component framePai, String cpf, String nome, int idCarteira, String password) throws SQLException, ParseException {
-        Acionista novoAcionista  = new Acionista(cpf, nome, idCarteira, password);
+        Acionista novoAcionista;  
+        novoAcionista = new Acionista(cpf, nome, idCarteira, password);
         new AcionistasDAO().salvar(framePai, novoAcionista);
     }
     

@@ -30,17 +30,16 @@ public class AcoesController {
     
     public AcoesController(Acionista acionista) throws SQLException{
         this.acionista = acionista;
-        this.carteira = carteiraDao.findCarteira(acionista.getCarteira());
+        this.carteira = carteiraDao.findCarteira(this.acionista.getCarteira());
     }
     
     public Carteira getCarteira() throws SQLException {
         return this.carteira;
     }
 
-    public boolean testaLimite(double valor) {
-        System.out.println("testa limite get saldo" + this.carteira.getSaldo());
-        double saldo = this.carteira.getSaldo();
-        return valor < saldo;
+    public boolean testaLimite(int idCarteira, double valor) throws SQLException {
+        double saldo = carteiraDao.findCarteira(idCarteira).getSaldo();
+        return valor <= saldo;
     }
     
     public void compraAcao(int idCarteira, double custo, int corretagem, int quantidade) throws SQLException {
@@ -53,22 +52,21 @@ public class AcoesController {
 //        System.out.println(retornoDinheiro); //Conferir se retorno está correto
     }
     //TODO Carteira Controller
-    public double adicionaDinheiro (int idCarteira, double valor) throws SQLException {
+    public void adicionaDinheiro (int idCarteira, double valor) throws SQLException {
         String add = "Adicionar";
-        double novoSaldo = carteiraDao.alteraDinheiro(idCarteira, valor, add);
-        return novoSaldo;
+        carteiraDao.alteraDinheiro(idCarteira, valor, add);
+        this.carteira.setSaldo(carteiraDao.findCarteira(idCarteira).getSaldo());
     }
     
      //TODO Carteira Controller
-    public double diminuiDinheiro (int idCarteira, double valor) throws SQLException, Exception {
-        String del = "Dimiuir";
-        if(!testaLimite(valor)) {
-            System.out.println("Sem Limite");
+    public void diminuiDinheiro (int idCarteira, double valor) throws SQLException, Exception {
+        String del = "Diminuir";
+        if(!testaLimite(idCarteira, valor)) {
             JOptionPane.showMessageDialog(null, "Não é possível realizar a ação!", "Sem Limite", JOptionPane.ERROR_MESSAGE);
         } else {
-            return carteiraDao.alteraDinheiro(idCarteira, valor, del);
+            carteiraDao.alteraDinheiro(idCarteira, valor, del);
+            this.carteira.setSaldo(carteiraDao.findCarteira(idCarteira).getSaldo());
         }
-        return this.carteira.getSaldo();
     }
     
     private double getEncargosCompra() {

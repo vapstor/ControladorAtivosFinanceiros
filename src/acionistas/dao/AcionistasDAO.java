@@ -4,9 +4,11 @@ import app.dao.GenericDAO;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import acionistas.model.Acionista;
+import acoes.model.Carteira;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 //import java.util.List;
 /**
@@ -60,5 +62,23 @@ public class AcionistasDAO extends GenericDAO {
             }
         }
         return acionista;
+    }
+    
+    public ArrayList findIdAllCarteiras() throws SQLException {
+        String select = "SELECT Carteira FROM Acionistas";
+        ArrayList listaCarteiras = new ArrayList();
+        int idCarteira;
+        try (PreparedStatement stmt = getConnection().prepareStatement(select)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    idCarteira = rs.getInt("Carteira");
+                    listaCarteiras.add(idCarteira);
+                }
+                rs.close();
+            }
+            stmt.close();
+        }
+        System.out.print(listaCarteiras);
+        return listaCarteiras;
     }
 }

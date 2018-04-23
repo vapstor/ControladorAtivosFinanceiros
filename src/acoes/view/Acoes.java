@@ -82,24 +82,22 @@ public class Acoes extends javax.swing.JFrame {
     }
     
     public void incrementaSaldo(double valor) throws SQLException {
-        double novoSaldo = ac.adicionaDinheiro(this.acionistaLogado.getCarteira(), valor);
+        ac.adicionaDinheiro(this.acionistaLogado.getCarteira(), valor);
+        double novoSaldo = ac.getCarteira().getSaldo();
         atualizaSaldo(novoSaldo);
     }
     
     public void decrementaSaldo(double valor) throws SQLException, Exception {
-        double novoSaldo = ac.diminuiDinheiro(this.acionistaLogado.getCarteira(), valor);
+        ac.diminuiDinheiro(this.acionistaLogado.getCarteira(), valor);
+        double novoSaldo = ac.getCarteira().getSaldo();
         atualizaSaldo(novoSaldo);
     }
     
     public void atualizaSaldo (double novoSaldo){
-//        try {
-//            System.out.println("atualizando Saldo" + ac.getCarteira().getSaldo());
-            
-//            this.valueSaldo.setText(String.valueOf(ac.getCarteira().getSaldo()));
+        if(!this.valueSaldo.getText().equals(String.valueOf(novoSaldo))) {
             this.valueSaldo.setText(String.valueOf(novoSaldo));
-//        } catch (SQLException e) {
-//            System.out.println("Erro: " + e);
-//        }
+        JOptionPane.showMessageDialog(this, "Saldo Atualizado!", "Atualização de Saldo", JOptionPane.PLAIN_MESSAGE);
+        }
     }
 
     /**
@@ -487,7 +485,6 @@ public class Acoes extends javax.swing.JFrame {
     private void adicionaSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaSaldoBtnActionPerformed
         try {
             incrementaSaldo(Double.parseDouble(this.inputEditSaldo.getText()));
-            JOptionPane.showMessageDialog(panelActions, "Saldo Atualizado!", "Atualização de Saldo", JOptionPane.PLAIN_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -510,7 +507,6 @@ public class Acoes extends javax.swing.JFrame {
     private void retiraSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retiraSaldoBtnActionPerformed
          try {
             decrementaSaldo(Double.parseDouble(this.inputEditSaldo.getText()));
-            JOptionPane.showMessageDialog(panelActions, "Saldo Atualizado!", "Atualização de Saldo", JOptionPane.PLAIN_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

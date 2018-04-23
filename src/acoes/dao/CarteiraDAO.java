@@ -5,7 +5,6 @@
  */
 package acoes.dao;
 
-import acionistas.model.Acionista;
 import app.dao.GenericDAO;
 import java.awt.Component;
 import java.sql.PreparedStatement;
@@ -13,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import acoes.model.Carteira;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,7 +27,6 @@ public class CarteiraDAO extends GenericDAO {
             save(
                     insertCarteira, novaCarteira.getID(), novaCarteira.getSaldo()
             );
-            System.out.println("Carteira Salva (CARTEIRA DAO)!");
         } catch (SQLException e){
             JOptionPane.showMessageDialog(framePai, "Ocorreu um erro" + "\n" + e);
         }
@@ -53,12 +52,34 @@ public class CarteiraDAO extends GenericDAO {
         return carteira;
     }
     
-    public double alteraDinheiro(int idCarteira, double valor, String operacao) throws SQLException {
+    
+    public ArrayList findAllCarteiras() throws SQLException {
+        String select = "SELECT * FROM Carteira";
+        ArrayList listaCarteiras = new ArrayList();
+        Carteira carteira = null;
+        try (PreparedStatement stmt = getConnection().prepareStatement(select)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    carteira = new Carteira(
+                        rs.getInt("Carteira"),
+                        rs.getDouble("Saldo")
+                    );
+                    listaCarteiras.add(carteira);
+                }
+                rs.close();
+            }
+            stmt.close();
+        }
+        return listaCarteiras;
+    }
+    
+    
+    
+    public void alteraDinheiro(int idCarteira, double valor, String operacao) throws SQLException {
         Carteira carteira = findCarteira(idCarteira);
         
         if(operacao.equals("Adicionar")) {
             carteira.setSaldo(carteira.getSaldo() + valor);
-            System.out.println("novo saldo carteira add"+ carteira.getSaldo());
             double novoSaldo = carteira.getSaldo();
             
             String update = "UPDATE Carteira SET Saldo = ? WHERE Carteira.ID = ?;";
@@ -67,14 +88,13 @@ public class CarteiraDAO extends GenericDAO {
                 stmt.setString(1, Double.toString(novoSaldo));
                 stmt.setString(2, Integer.toString(idCarteira));
                 int rs = stmt.executeUpdate();
-                System.out.println(rs);
                 stmt.close();
             } catch (SQLException e){
                 JOptionPane.showMessageDialog(null,"Erro: " + e);
             }
-            return novoSaldo;
         } else {
             carteira.setSaldo(carteira.getSaldo() - valor);
+            System.out.println("novo saldo carteira DEL "+ carteira.getSaldo());
             double novoSaldo = carteira.getSaldo();
             String update = "UPDATE Carteira SET Saldo = ? WHERE Carteira.ID = ?;";
             try (PreparedStatement stmt = getConnection().prepareStatement(update)) {
@@ -86,7 +106,6 @@ public class CarteiraDAO extends GenericDAO {
             } catch (SQLException e){
                 JOptionPane.showMessageDialog(null,"Erro: " + e);
             }
-            return novoSaldo;
         }
     }
    

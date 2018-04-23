@@ -1,16 +1,17 @@
 
 package auth.view;
-import auth.view.TelaLogin;
 import acionistas.controller.AcionistasController;
 import acoes.dao.CarteiraDAO;
+import acoes.model.Carteira;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
-import acoes.model.Carteira;
 /**
  *
  * @author vapstor
@@ -179,10 +180,24 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
         if(valido) {
             //tenta salvar o Acionista
             try {
-                ac.addAcionista(this, valueCPF, valueNome, valueIdCarteira, pass);
-                ac.addCarteira(this, valueIdCarteira);
-                this.setVisible(false);   
-                abreTelaLoginPosCadastro(valueCPF);
+                ArrayList listaCarteiras = ac.findIdAllCarteiras();
+                boolean idCarteiraExistente = false;
+                
+                for(int i=0; i< listaCarteiras.size(); i++) {
+                    if(Integer.parseInt(listaCarteiras.get(i).toString()) == valueIdCarteira) {
+                        idCarteiraExistente = true;
+                    }
+                }
+
+                if(idCarteiraExistente) {
+                    JOptionPane.showMessageDialog(this,"ID de Carteira já Cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    ac.addAcionista(this, valueCPF, valueNome, valueIdCarteira, pass);
+                    ac.addCarteira(this, valueIdCarteira, valueCPF);
+                    this.setVisible(false);   
+                    abreTelaLoginPosCadastro(valueCPF);
+                }
+                
             } catch (SQLException e ) {
                  System.out.println("Erro SQL" + e);
                 //Testa se o CPF Já Existe na Base e Lança Exceção
@@ -191,37 +206,16 @@ public class TelaAdicionarAcionista extends javax.swing.JFrame {
                     {
                         JOptionPane.showMessageDialog(this, "O CPF " + valueCPF + " já foi cadastrado" + "\n" 
                         + "Favor revisar as Informações", "CPF Já Salvo", JOptionPane.ERROR_MESSAGE);
-                    }
-
-                //Teste Carteira Cadastrados
-                else if(e.toString().equalsIgnoreCase(
-                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueIdCarteira + "' for key 'PRIMARY'"))
-                        {
-                            JOptionPane.showMessageDialog(this, "A Carteira " + valueCPF + " já foi cadastrada" + "\n" 
-                            + "Favor revisar as Informações", "Carteira Já Salva", JOptionPane.ERROR_MESSAGE);
-                        }
-
-                //Teste CPF && Carteira Cadastrados
-                else if(e.toString().equalsIgnoreCase(
-                        "com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '"+ valueCPF+"-"+valueIdCarteira + "' for key 'PRIMARY'"))
-                {
-                    JOptionPane.showMessageDialog(this, "O CPF " + valueCPF + "\n"+ 
-                            "E a Carteira " + valueIdCarteira + "\n" +
-                            "já foram cadastrados" + "\n" 
-                            + "Favor revisar as Informações", "CPF e Carteira Já Salvos", JOptionPane.ERROR_MESSAGE);
-                }
-                
-                else {
+                } else {
                     JOptionPane.showMessageDialog(this, "Erro no BD!" + "\n" + e);
                 }
-
             } catch (ParseException ex) {
                 Logger.getLogger(TelaAdicionarAcionista.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Nao foi possível salvar contato!" + "\n" + ex.getLocalizedMessage());
             }
-                catch (Exception error){
+            catch (Exception error){
                     JOptionPane.showMessageDialog(this, "Erro!" + "\n" + error);
-                };
+            };
         }
     }//GEN-LAST:event_onClickAddUser
 
