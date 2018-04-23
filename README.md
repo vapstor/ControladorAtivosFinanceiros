@@ -29,3 +29,48 @@ As propriedades acima poderão ser configuradas através da interface gráfica d
 O código do sistema deve ser organizado de acordo com o padrão MVC, no qual o Modelo é composto pelas entidades manipuladas pela aplicação, a Visão corresponde à interface gráfica e o Controlador implementa a lógica da aplicação. Os componentes devem estar em pacotes ou projetos separados do código da interface gráfica da aplicação. 
 
 Para facilitar os testes do sistema, sugerimos que no lugar de utilizar uma API de cotações, você obtenha as cotações a partir de um componente que modifique aleatóriamente as cotações dos ativos.
+
+## Importante:
+
+É Necessário ter o MySQL isntalado para o programa compilar
+
+### Database: ``acoes_db``
+
+### Tabela Acionistas:
+`CREATE TABLE `Acionistas` (
+  `CPF` varchar(15) NOT NULL,
+  `Nome` varchar(45) NOT NULL,
+  `Carteira` int(15) NOT NULL,
+  `Password` varchar(45) NOT NULL,
+  PRIMARY KEY (`CPF`),
+  KEY `fk_Acionistas_1_idx` (`Carteira`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 `
+
+### Tabela Carteira:
+``CREATE TABLE `Carteira` (
+  `ID` int(15) NOT NULL,
+  `Saldo` double(10,2) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `carteira_fk_idx` (`ID`),
+  CONSTRAINT `fk_Carteira_1` FOREIGN KEY (`ID`) REFERENCES `Acionistas` (`Carteira`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1``
+
+### Tabela Ações:
+``CREATE TABLE `Acoes` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nome` varchar(45) NOT NULL,
+  `Quantidade` int(20) NOT NULL,
+  `Corretagem` double(10,2) NOT NULL,
+  `Cotacao` double(10,2) NOT NULL,
+  `Custo` double(10,2) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1``
+
+### Tabela Cotacoes:
+``CREATE TABLE `Cotacoes` (
+  `Nome` varchar(20) NOT NULL,
+  `Valor` double(10,2) DEFAULT NULL,
+  `Corretagem` double(10,2) DEFAULT NULL,
+  `Imposto` double(10,2) DEFAULT NULL,
+  PRIMARY KEY (`Nome`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1``
