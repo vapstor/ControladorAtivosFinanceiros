@@ -34,7 +34,7 @@ Para facilitar os testes do sistema, sugerimos que no lugar de utilizar uma API 
 
 ## Importante:
 
-É Necessário ter o MySQL isntalado para o programa compilar
+É Necessário ter o MySQL instalado para o programa compilar
 
 ### Database: ``acoes_db``
 
