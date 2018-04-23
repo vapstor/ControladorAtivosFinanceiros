@@ -470,7 +470,6 @@ public class Acoes extends javax.swing.JFrame {
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Ocorreu um erro ao deletar" + "\n" + e);
             }
-            
         }
     }//GEN-LAST:event_excluirContaBtnActionPerformed
 
@@ -479,7 +478,7 @@ public class Acoes extends javax.swing.JFrame {
     }//GEN-LAST:event_venderAcaoBtnActionPerformed
 
     private void comprarAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtnActionPerformed
-        // TODO add your handling code here:
+        abreTelaConfiguraCotacao(Integer.parseInt(this.inputBuyAcao.getText()));
     }//GEN-LAST:event_comprarAcaoBtnActionPerformed
 
     private void adicionaSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaSaldoBtnActionPerformed
@@ -501,7 +500,6 @@ public class Acoes extends javax.swing.JFrame {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         atualizaTabela();
-//        atualizaSaldo();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void retiraSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retiraSaldoBtnActionPerformed
@@ -563,6 +561,13 @@ public class Acoes extends javax.swing.JFrame {
         tl.setVisible(true);
     }
     
+    private void abreTelaConfiguraCotacao(int unidades) {
+        
+        this.setVisible(false);
+        
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionaSaldoBtn;
     private javax.swing.JButton btnRefresh;
@@ -595,6 +600,6 @@ public class Acoes extends javax.swing.JFrame {
     private javax.swing.JLabel valueSaldo;
     private javax.swing.JButton venderAcaoBtn;
     // End of variables declaration//GEN-END:variables
-    
+
      
 }
