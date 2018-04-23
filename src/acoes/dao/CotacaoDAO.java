@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import acoes.model.Cotacao;
+import java.awt.Component;
 
 /**
  *
@@ -43,5 +44,14 @@ public class CotacaoDAO extends GenericDAO {
         }
         
         return ct;
+    }
+    
+    public void addCotacao(Component framePai, String nome, double valor, double corretagem, double imposto) {
+        String insert = "INSERT INTO cotacoes VALUES ?, ?, ?, ?";
+        try {
+           save(insert, nome, valor, corretagem, imposto);
+        } catch (SQLException e){
+            System.out.println("Erro: " + e);
+        }
     }
 }

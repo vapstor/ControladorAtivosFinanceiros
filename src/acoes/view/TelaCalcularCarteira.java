@@ -187,12 +187,12 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
     private void valorCarteiraBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorCarteiraBtnActionPerformed
         try {
             AcoesController ac = new AcoesController(acionistaLogado);
-            ac.compraAcao(
+            ac.compraAcao(this,
                 this.carteiraAcionista.getID(),
                 Integer.parseInt(String.valueOf(this.inputValorUnitarioAcao.getText())),
                 Double.parseDouble(String.valueOf(this.inputValorCorretagem.getText())),
-                Integer.parseInt(String.valueOf(this.inputAcoesCompradas.getText()))
-                
+                Integer.parseInt(String.valueOf(this.inputAcoesCompradas.getText())),
+                Double.parseDouble(String.valueOf(this.inputValorCaixa.getText()))
             );
         } catch (SQLException ex) {
             Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);

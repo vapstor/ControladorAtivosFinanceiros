@@ -5,6 +5,8 @@
  */
 package acoes.controller;
 
+import acionistas.controller.AcionistasController;
+import acionistas.dao.AcionistasDAO;
 import acoes.dao.AcaoDAO;
 import acoes.dao.CarteiraDAO;
 import acoes.dao.CotacaoDAO;
@@ -15,6 +17,7 @@ import acoes.model.Acao;
 import acionistas.model.Acionista;
 import acoes.model.Carteira;
 import acoes.model.Cotacao;
+import java.awt.Component;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +26,8 @@ import javax.swing.JOptionPane;
  */
 public class AcoesController {
     CarteiraDAO carteiraDao = new CarteiraDAO();
+    AcionistasDAO acionistaDao = new AcionistasDAO();
+    CotacaoDAO cotacaoDao = new CotacaoDAO();
     AcaoDAO acaoDAO = new AcaoDAO();
     Acionista acionista;
     Carteira carteira;
@@ -59,25 +64,39 @@ public class AcoesController {
     }
     
     
-    public void compraAcao(int idCarteira, double custo, double corretagem, int quantidade) throws SQLException {
+    public void registraCotacao(Component framePai, int idCarteira, double custo, double corretagem, int quantidade, double valorNoCaixa) throws SQLException {
+        String nome = "Compra";
         double precoAcao = custo * quantidade;
-//        double acaoCorrigida = carteiraDao.corrigeAcao(precoAcao, corretagem);;;
-//        //a = a-b; a-=b
-//        custo -= custo * getEncargosCompra();
+        double precoAcaoCorrigida = corrigeAcaoCompra(precoAcao);
+        
+        carteira = carteiraDao.findCarteira(idCarteira);
+        carteira.setSaldo(valorNoCaixa);
+        
+        if(precoAcaoCorrigida > valorNoCaixa) {
+            JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!");
+        } else {
+            cotacaoDao.addCotacao(framePai, nome, custo, corretagem, custo);
+        }
+
 //        double retornoDinheiro = carteiraDao.alteraDinheiro(idCarteira, custo);
 //        System.out.println(retornoDinheiro); //Conferir se retorno está correto
     }
     
+    public double corrigeAcaoCompra(double precoAcao) {
+        return precoAcao * getEncargosCompra();
+    }
+    
+    
     private double getEncargosCompra() {
         CotacaoDAO ctdao = new CotacaoDAO(); 
-        Cotacao ct = ctdao.findCotacao("compra");
-        Double encargo = ct.getImposto() + ct.getCorretagem();
+        Cotacao ct = ctdao.findCotacao("Compra");
+        Double encargo = ct.getCorretagem();
         return encargo;
     }
     
     private double getEncargosVenda() {
         CotacaoDAO ctdao = new CotacaoDAO(); 
-        Cotacao ct = ctdao.findCotacao("venda");
+        Cotacao ct = ctdao.findCotacao("Venda");
         Double encargo = ct.getImposto() + ct.getCorretagem();
         return encargo;
     }
