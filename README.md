@@ -30,6 +30,8 @@ O código do sistema deve ser organizado de acordo com o padrão MVC, no qual o 
 
 Para facilitar os testes do sistema, sugerimos que no lugar de utilizar uma API de cotações, você obtenha as cotações a partir de um componente que modifique aleatóriamente as cotações dos ativos.
 
+
+
 ## Importante:
 
 É Necessário ter o MySQL isntalado para o programa compilar
