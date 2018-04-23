@@ -70,9 +70,9 @@ public class AcoesController {
     }
     
     public void addAcaoCompra(int quantidade, double valor, double valorNoCaixa) throws SQLException {
+        //TODO valor sobra do investimento adicionar a carteira
         double precoAcao = valor * quantidade;        
         double precoAcaoCorrigida = precoAcao + getEncargosCompra(precoAcao);
-        
         
         if(precoAcaoCorrigida > valorNoCaixa) {
             JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!" 
@@ -85,6 +85,7 @@ public class AcoesController {
             );
         } else {
             acaoDAO.addAcao(cotCompra.getNome(), quantidade, precoAcaoCorrigida, this.carteira.getID());
+            JOptionPane.showMessageDialog(null, "Ação Comprada com Sucesso!", "Ação Adquirida", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     

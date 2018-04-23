@@ -22,7 +22,7 @@ public class AcaoDAO extends GenericDAO {
     
     public void addAcao(String tipo, int quantidade, double valorTotalAcao, int idCarteira) throws SQLException {
         try {
-            String insert = "INSERT INTO Acoes VALUES(?, ?, ?, ?)";
+            String insert = "INSERT INTO Acoes (Nome, Quantidade, Cotacao, IdCarteira) VALUES(?, ?, ?, ?)";
             save(insert, tipo, quantidade, valorTotalAcao, idCarteira);
         } catch (SQLException e) {
             throw new SQLException("Erro: " + e);
