@@ -20,10 +20,20 @@ import app.dao.GenericDAO;
 public class AcaoDAO extends GenericDAO {
     CarteiraDAO carteiraDao;
     
-    public void addAcao(String tipo, int quantidade, double valorTotalAcao, int idCarteira) throws SQLException {
+    public void addAcao(String tipo, int quantidade, double corretagem, double cotacao, double valorTotalAcao) throws SQLException {
         try {
-            String insert = "INSERT INTO Acoes (Nome, Quantidade, Cotacao, IdCarteira) VALUES(?, ?, ?, ?)";
-            save(insert, tipo, quantidade, valorTotalAcao, idCarteira);
+            String insert = "INSERT INTO Acoes (Nome, Quantidade, Corretagem, Cotacao, Custo) VALUES(?, ?, ?,? ,?)";
+            save(insert, tipo, quantidade, cotacao, corretagem, valorTotalAcao);
+        } catch (SQLException e) {
+            throw new SQLException("Erro: " + e);
+        }
+        
+    }
+    
+    public void limpaListaAcoes() throws SQLException {
+        try {
+            String deleteAll = "TRUNCATE Acoes";
+            delete(deleteAll);
         } catch (SQLException e) {
             throw new SQLException("Erro: " + e);
         }
@@ -43,8 +53,9 @@ public class AcaoDAO extends GenericDAO {
                         rs.getInt("ID"),
                         rs.getString("Nome"),
                         rs.getInt("Quantidade"),
+                        rs.getDouble("Corretagem"),
                         rs.getDouble("Cotacao"),
-                        rs.getInt("idCarteira")
+                        rs.getDouble("Custo")
                 );
             }
             rs.close();
@@ -66,8 +77,9 @@ public class AcaoDAO extends GenericDAO {
                         rs.getInt("ID"),
                         rs.getString("Nome"),
                         rs.getInt("Quantidade"),
+                        rs.getDouble("Corretagem"),
                         rs.getDouble("Cotacao"),
-                        rs.getInt("idCarteira")
+                        rs.getDouble("Custo")
                 );
                 listaAcoes.add(acao);
             }

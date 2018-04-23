@@ -64,6 +64,9 @@ public class AcoesController {
         }
     }
     
+    public void deleteAllData() throws SQLException {
+        acaoDAO.limpaListaAcoes();
+    }
     
     public void atualizaCotacaoCompra(Component framePai, String tipo, double custo, double corretagem) throws SQLException {
         cotacaoDao.updateCotacao(framePai, tipo, custo, corretagem, 0.00);
@@ -72,7 +75,8 @@ public class AcoesController {
     public void addAcaoCompra(int quantidade, double valor, double valorNoCaixa) throws SQLException {
         //TODO valor sobra do investimento adicionar a carteira
         double precoAcao = valor * quantidade;        
-        double precoAcaoCorrigida = precoAcao + getEncargosCompra(precoAcao);
+        double cotacao = getEncargosCompra(precoAcao);
+        double precoAcaoCorrigida = precoAcao + cotacao;
         
         if(precoAcaoCorrigida > valorNoCaixa) {
             JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!" 
@@ -84,7 +88,14 @@ public class AcoesController {
                     "Investimento Insuficiente", JOptionPane.ERROR_MESSAGE
             );
         } else {
-            acaoDAO.addAcao(cotCompra.getNome(), quantidade, precoAcaoCorrigida, this.carteira.getID());
+            
+            acaoDAO.addAcao(
+                    cotCompra.getNome(), 
+                    quantidade,
+                    cotCompra.getCorretagem(),
+                    cotacao,
+                    precoAcaoCorrigida 
+            );
             JOptionPane.showMessageDialog(null, "Ação Comprada com Sucesso!", "Ação Adquirida", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -118,14 +129,16 @@ public class AcoesController {
         
         ArrayList<ArrayList<String>> data = new ArrayList<>();
         List listaAcoes = getAcoes();
-        System.out.println(listaAcoes+" <- Lista Acoes");
+//        System.out.println(listaAcoes+" <- Lista Acoes");
         for(int i = 0; i < listaAcoes.size(); i++ ) {
             acao = (Acao) listaAcoes.get(i);
             ArrayList<String> row = new ArrayList();
             row.add(acao.getNome()); 
             row.add(String.valueOf(acao.getQuantidade())); 
-            row.add(String.valueOf(acao.getCotacao())); 
-            row.add(String.valueOf(acao.getCotacao()*acao.getQuantidade())); 
+            row.add(String.valueOf(acao.getCorretagem())); 
+            row.add(String.valueOf(acao.getCotacao()));
+            row.add(String.valueOf(acao.getCusto()));
+            
             data.add(row);
         }
         return data;

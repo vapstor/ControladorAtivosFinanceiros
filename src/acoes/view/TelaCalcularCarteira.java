@@ -211,7 +211,14 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
             ac.addAcaoCompra(
                 Integer.parseInt(String.valueOf(this.inputAcoesCompradas.getText())),
                 Integer.parseInt(String.valueOf(this.inputValorUnitarioAcao.getText())),
-                Double.parseDouble(String.valueOf(this.inputValorCaixa.getText())));
+                Double.parseDouble(String.valueOf(this.inputValorCaixa.getText()))
+            );
+            this.setVisible(false);
+            try {
+                abreTelaAcoes();
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
         }

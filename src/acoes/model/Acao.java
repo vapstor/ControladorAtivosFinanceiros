@@ -15,13 +15,15 @@ public class Acao {
     private double cotacao;
     private double corretagem;
     private int idCarteira;
+    private double custo;
     
     //cotacao = custo/preco
-    public Acao(int id, String nome, int quantidade, double cotacao, int idCarteira){
+    public Acao(int id, String nome, int quantidade, double cotacao, double corretagem, double custo){
         this.nome = nome;
         this.quantidade = quantidade;
+        this.custo = custo;
+        this.corretagem = corretagem;
         this.cotacao = cotacao;
-        this.idCarteira = idCarteira;
     }
     
     
@@ -63,6 +65,22 @@ public class Acao {
 
     public void setCorretagem(double corretagem) {
         this.corretagem = corretagem;
+    }
+
+    public int getIdCarteira() {
+        return idCarteira;
+    }
+
+    public void setIdCarteira(int idCarteira) {
+        this.idCarteira = idCarteira;
+    }
+
+    public double getCusto() {
+        return custo;
+    }
+
+    public void setCusto(double custo) {
+        this.custo = custo;
     }
 
     

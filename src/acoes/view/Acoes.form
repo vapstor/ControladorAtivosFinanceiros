@@ -364,15 +364,15 @@
                       <Connection code="dtm" type="code"/>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="3"/>
+                      <TableColumnModel selectionModel="2"/>
                     </Property>
                     <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                      <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultTableModel dtm = new DefaultTableModel(0, 0);&#xa;        String header[] = new String[] {&quot;A&#xe7;&#xe3;o&quot;, &quot;Quantidade&quot;, &quot;Corretagem&quot;, &quot;Cota&#xe7;&#xe3;o&quot;, &quot;Total(R$)&quot;};&#xa;        dtm.setColumnIdentifiers(header);&#xa;        tabelaAcoes.setModel(dtm);&#xa;        // add row dynamically into the table&#xa;        for (int i = 0; i &lt; CurrentTableData.size(); i++) {&#xa;            dtm.addRow(new Object[] {&#xa;                this.CurrentTableData.get(i).get(0),&#xa;                this.CurrentTableData.get(i).get(1),&#xa;                this.CurrentTableData.get(i).get(2),&#xa;                this.CurrentTableData.get(i).get(3)&#xa;            });&#xa;        }"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultTableModel dtm = new DefaultTableModel(0, 0);&#xa;        String header[] = new String[] {&quot;Tipo de A&#xe7;&#xe3;o&quot;, &quot;Quantidade&quot;, &quot;Corretagem&quot;, &quot;Cota&#xe7;&#xe3;o&quot;, &quot;Total(R$)&quot;};&#xa;        dtm.setColumnIdentifiers(header);&#xa;        tabelaAcoes.setModel(dtm);&#xa;        // add row dynamically into the table&#xa;        for (int i = 0; i &lt; CurrentTableData.size(); i++) {&#xa;            dtm.addRow(new Object[] {&#xa;                this.CurrentTableData.get(i).get(0),&#xa;                this.CurrentTableData.get(i).get(1),&#xa;                this.CurrentTableData.get(i).get(2),&#xa;                this.CurrentTableData.get(i).get(3),&#xa;                this.CurrentTableData.get(i).get(4)&#xa;            });&#xa;        }"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

@@ -63,7 +63,7 @@ public class Acoes extends javax.swing.JFrame {
             System.out.println("erro:" + ex);
         }
         DefaultTableModel dtm = new DefaultTableModel(0, 0);
-        String header[] = new String[] {"Acão", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
+        String header[] = new String[] {"Tipo de Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
         dtm.setColumnIdentifiers(header);
         tabelaAcoes.setModel(dtm);
         // add row dynamically into the table      
@@ -72,9 +72,11 @@ public class Acoes extends javax.swing.JFrame {
                 newTableData.get(i).get(0), 
                 newTableData.get(i).get(1), 
                 newTableData.get(i).get(2), 
-                newTableData.get(i).get(3) 
+                newTableData.get(i).get(3),
+                newTableData.get(i).get(4)
             });
         }
+        JOptionPane.showMessageDialog(this, "Tabela Atualizada!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
         int x = tabelaAcoes.getSelectedRow();
         System.out.println(x);
         int y = tabelaAcoes.getSelectedColumn();
@@ -291,7 +293,7 @@ public class Acoes extends javax.swing.JFrame {
         tituloInfo.setText("Bem Vindo,");
 
         DefaultTableModel dtm = new DefaultTableModel(0, 0);
-        String header[] = new String[] {"Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
+        String header[] = new String[] {"Tipo de Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
         dtm.setColumnIdentifiers(header);
         tabelaAcoes.setModel(dtm);
         // add row dynamically into the table
@@ -300,13 +302,15 @@ public class Acoes extends javax.swing.JFrame {
                 this.CurrentTableData.get(i).get(0),
                 this.CurrentTableData.get(i).get(1),
                 this.CurrentTableData.get(i).get(2),
-                this.CurrentTableData.get(i).get(3)
+                this.CurrentTableData.get(i).get(3),
+                this.CurrentTableData.get(i).get(4)
             });
         }
         tabelaAcoes.setModel(dtm);
         tabelaAcoes.setColumnSelectionAllowed(true);
+        tabelaAcoes.getTableHeader().setReorderingAllowed(false);
         panelScrolldaLista.setViewportView(tabelaAcoes);
-        tabelaAcoes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        tabelaAcoes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         tituloPanelLista.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
         tituloPanelLista.setText("Histórico de transações:");
@@ -433,7 +437,13 @@ public class Acoes extends javax.swing.JFrame {
         if(dialogButton == JOptionPane.YES_OPTION) {
             AcionistasController caf = new AcionistasController();
             try {
+                AcoesController ac = new AcoesController(acionistaLogado);
+            } catch (SQLException ex) {
+                Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
                 caf.excluir(this.acionistaLogado.getCPF());
+                ac.deleteAllData();
                 this.acionistaLogado = null;
                 this.setVisible(false);
                 abreTelaLogin();

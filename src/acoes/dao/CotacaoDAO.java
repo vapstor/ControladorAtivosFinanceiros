@@ -42,7 +42,7 @@ public class CotacaoDAO extends GenericDAO {
         } catch (SQLException e){
             System.out.println("Erro: " + e);
         }
-        return cotacao;
+            return cotacao;
     }
     
     public void updateCotacao(Component framePai, String nome, double valor, double corretagem, double imposto) {
