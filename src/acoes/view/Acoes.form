@@ -135,8 +135,6 @@
                       </Group>
                       <Component id="venderAcaoBtn" max="32767" attributes="0"/>
                       <Component id="comprarAcaoBtn" alignment="1" max="32767" attributes="0"/>
-                      <Component id="inputBuyAcao" alignment="0" max="32767" attributes="0"/>
-                      <Component id="inputSoldAcao" alignment="0" max="32767" attributes="0"/>
                       <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="labelSaldo" min="-2" max="-2" attributes="0"/>
@@ -164,15 +162,11 @@
                       <Component id="adicionaSaldoBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="retiraSaldoBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                  <Component id="inputBuyAcao" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="comprarAcaoBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                  <Component id="inputSoldAcao" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="venderAcaoBtn" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Component id="comprarAcaoBtn" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="venderAcaoBtn" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
                   <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="excluirContaBtn" min="-2" max="-2" attributes="0"/>
@@ -229,30 +223,6 @@
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator2">
-        </Component>
-        <Component class="javax.swing.JTextField" name="inputBuyAcao">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Ubuntu Light" size="15" style="2"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="A&#xe7;&#xf5;es a serem compradas..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputBuyAcaoFocusGained"/>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputBuyAcaoFocusLost"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="inputSoldAcao">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Ubuntu Light" size="15" style="2"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="A&#xe7;&#xf5;es a serem vendidas..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputSoldAcaoFocusGained"/>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputSoldAcaoFocusLost"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="labelSaldo">
           <Properties>

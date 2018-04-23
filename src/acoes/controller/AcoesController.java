@@ -42,23 +42,12 @@ public class AcoesController {
         return valor <= saldo;
     }
     
-    public void compraAcao(int idCarteira, double custo, int corretagem, int quantidade) throws SQLException {
-//        
-////        double precoAcao = custo * quantidade;
-////        double acaoCorrigida = carteiraDao.corrigeAcao(precoAcao, corretagem);;
-//        //a = a-b; a-=b
-//        custo -= custo * getEncargosCompra();
-//        double retornoDinheiro = carteiraDao.alteraDinheiro(idCarteira, custo);
-//        System.out.println(retornoDinheiro); //Conferir se retorno está correto
-    }
-    //TODO Carteira Controller
     public void adicionaDinheiro (int idCarteira, double valor) throws SQLException {
         String add = "Adicionar";
         carteiraDao.alteraDinheiro(idCarteira, valor, add);
         this.carteira.setSaldo(carteiraDao.findCarteira(idCarteira).getSaldo());
     }
     
-     //TODO Carteira Controller
     public void diminuiDinheiro (int idCarteira, double valor) throws SQLException, Exception {
         String del = "Diminuir";
         if(!testaLimite(idCarteira, valor)) {
@@ -67,6 +56,16 @@ public class AcoesController {
             carteiraDao.alteraDinheiro(idCarteira, valor, del);
             this.carteira.setSaldo(carteiraDao.findCarteira(idCarteira).getSaldo());
         }
+    }
+    
+    
+    public void compraAcao(int idCarteira, double custo, double corretagem, int quantidade) throws SQLException {
+        double precoAcao = custo * quantidade;
+//        double acaoCorrigida = carteiraDao.corrigeAcao(precoAcao, corretagem);;;
+//        //a = a-b; a-=b
+//        custo -= custo * getEncargosCompra();
+//        double retornoDinheiro = carteiraDao.alteraDinheiro(idCarteira, custo);
+//        System.out.println(retornoDinheiro); //Conferir se retorno está correto
     }
     
     private double getEncargosCompra() {
@@ -82,6 +81,8 @@ public class AcoesController {
         Double encargo = ct.getImposto() + ct.getCorretagem();
         return encargo;
     }
+    
+    
     
     public List getAcoes() throws SQLException {
        return acaoDAO.findAcoes();

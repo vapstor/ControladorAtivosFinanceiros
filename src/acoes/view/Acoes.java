@@ -121,8 +121,6 @@ public class Acoes extends javax.swing.JFrame {
         comprarAcaoBtn = new javax.swing.JButton();
         logOutBtn = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        inputBuyAcao = new javax.swing.JTextField();
-        inputSoldAcao = new javax.swing.JTextField();
         labelSaldo = new javax.swing.JLabel();
         retiraSaldoBtn = new javax.swing.JButton();
         inputEditSaldo = new javax.swing.JTextField();
@@ -215,28 +213,6 @@ public class Acoes extends javax.swing.JFrame {
             }
         });
 
-        inputBuyAcao.setFont(new java.awt.Font("Ubuntu Light", 2, 15)); // NOI18N
-        inputBuyAcao.setText("Ações a serem compradas...");
-        inputBuyAcao.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                inputBuyAcaoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                inputBuyAcaoFocusLost(evt);
-            }
-        });
-
-        inputSoldAcao.setFont(new java.awt.Font("Ubuntu Light", 2, 15)); // NOI18N
-        inputSoldAcao.setText("Ações a serem vendidas...");
-        inputSoldAcao.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                inputSoldAcaoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                inputSoldAcaoFocusLost(evt);
-            }
-        });
-
         labelSaldo.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         labelSaldo.setText("Saldo:");
 
@@ -276,8 +252,6 @@ public class Acoes extends javax.swing.JFrame {
                         .addComponent(retiraSaldoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
                     .addComponent(venderAcaoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(comprarAcaoBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(inputBuyAcao)
-                    .addComponent(inputSoldAcao)
                     .addComponent(jSeparator2)
                     .addGroup(panelActionsLayout.createSequentialGroup()
                         .addComponent(labelSaldo)
@@ -299,15 +273,11 @@ public class Acoes extends javax.swing.JFrame {
                 .addGroup(panelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(adicionaSaldoBtn)
                     .addComponent(retiraSaldoBtn))
-                .addGap(27, 27, 27)
-                .addComponent(inputBuyAcao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comprarAcaoBtn)
-                .addGap(28, 28, 28)
-                .addComponent(inputSoldAcao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(venderAcaoBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(comprarAcaoBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(venderAcaoBtn)
+                .addGap(67, 67, 67)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(excluirContaBtn)
@@ -478,7 +448,7 @@ public class Acoes extends javax.swing.JFrame {
     }//GEN-LAST:event_venderAcaoBtnActionPerformed
 
     private void comprarAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtnActionPerformed
-        abreTelaConfiguraCotacao(Integer.parseInt(this.inputBuyAcao.getText()));
+        abreTelaConfiguraCotacao();
     }//GEN-LAST:event_comprarAcaoBtnActionPerformed
 
     private void adicionaSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaSaldoBtnActionPerformed
@@ -512,30 +482,6 @@ public class Acoes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_retiraSaldoBtnActionPerformed
 
-    private void inputBuyAcaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputBuyAcaoFocusLost
-        if(inputBuyAcao.getText().equals("")){
-            inputBuyAcao.setText("Ações a serem compradas...");
-        }
-    }//GEN-LAST:event_inputBuyAcaoFocusLost
-
-    private void inputSoldAcaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputSoldAcaoFocusLost
-        if(inputSoldAcao.getText().equals("")){
-            inputSoldAcao.setText("Ações a serem vendidas...");    
-        }
-    }//GEN-LAST:event_inputSoldAcaoFocusLost
-
-    private void inputBuyAcaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputBuyAcaoFocusGained
-        if(inputBuyAcao.getText().equals("Ações a serem compradas...")){
-            inputBuyAcao.setText("");
-        }
-    }//GEN-LAST:event_inputBuyAcaoFocusGained
-
-    private void inputSoldAcaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputSoldAcaoFocusGained
-        if(inputSoldAcao.getText().equals("Ações a serem vendidas...")){
-            inputSoldAcao.setText("");
-        }
-    }//GEN-LAST:event_inputSoldAcaoFocusGained
-
     private void inputEditSaldoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputEditSaldoFocusGained
         if(inputEditSaldo.getText().equals("Insira o valor...")){
             inputEditSaldo.setText("");
@@ -561,10 +507,11 @@ public class Acoes extends javax.swing.JFrame {
         tl.setVisible(true);
     }
     
-    private void abreTelaConfiguraCotacao(int unidades) {
-        
+    private void abreTelaConfiguraCotacao() {
+        String operacao = "ComprarAcoes";
         this.setVisible(false);
-        
+        TelaCalcularCarteira tcc = new TelaCalcularCarteira(operacao, this.acionistaLogado, this.carteiraAcionistaLogado);
+        tcc.setVisible(true);
     }
     
     
@@ -573,9 +520,7 @@ public class Acoes extends javax.swing.JFrame {
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton comprarAcaoBtn;
     private javax.swing.JButton excluirContaBtn;
-    private javax.swing.JTextField inputBuyAcao;
     private javax.swing.JTextField inputEditSaldo;
-    private javax.swing.JTextField inputSoldAcao;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
