@@ -203,16 +203,23 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
         String tipo = "Compra";
         try {
             AcoesController ac = new AcoesController(acionistaLogado);
+            ac.adicionaDinheiro(
+                    this.acionistaLogado.getCarteira(), 
+                    Double.parseDouble(String.valueOf(this.inputValorCaixa.getText()))
+            );
+            
             ac.atualizaCotacaoCompra(this,
                 tipo,
                 Integer.parseInt(String.valueOf(this.inputValorUnitarioAcao.getText())),
                 Double.parseDouble(String.valueOf(this.inputValorCorretagem.getText()))
             );
+            
             ac.addAcaoCompra(
                 Integer.parseInt(String.valueOf(this.inputAcoesCompradas.getText())),
                 Integer.parseInt(String.valueOf(this.inputValorUnitarioAcao.getText())),
                 Double.parseDouble(String.valueOf(this.inputValorCaixa.getText()))
             );
+            
             this.setVisible(false);
             try {
                 abreTelaAcoes();
@@ -220,6 +227,8 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
                 Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
+            Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_valorCarteiraBtnActionPerformed

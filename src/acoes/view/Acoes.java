@@ -459,6 +459,7 @@ public class Acoes extends javax.swing.JFrame {
 
     private void comprarAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtnActionPerformed
         abreTelaConfiguraCotacao();
+        ac.atualizaSaldo(this, this.valueSaldo);
     }//GEN-LAST:event_comprarAcaoBtnActionPerformed
 
     private void adicionaSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaSaldoBtnActionPerformed

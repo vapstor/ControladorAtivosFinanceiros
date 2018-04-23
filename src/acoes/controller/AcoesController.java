@@ -18,6 +18,7 @@ import acionistas.model.Acionista;
 import acoes.model.Carteira;
 import acoes.model.Cotacao;
 import java.awt.Component;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,6 +38,14 @@ public class AcoesController {
     public AcoesController(Acionista acionista) throws SQLException{
         this.acionista = acionista;
         this.carteira = carteiraDao.findCarteira(this.acionista.getCarteira());
+    }
+    
+    public void atualizaSaldo (Component framePai, JLabel valueSaldo){
+        double novoSaldo = carteira.getSaldo();
+        if(!valueSaldo.getText().equals(String.valueOf(novoSaldo))) {
+            valueSaldo.setText(String.valueOf(novoSaldo));
+        JOptionPane.showMessageDialog(framePai, "Saldo Atualizado!", "Atualização de Saldo", JOptionPane.PLAIN_MESSAGE);
+        }
     }
     
     public Carteira getCarteira() throws SQLException {
@@ -72,13 +81,16 @@ public class AcoesController {
         cotacaoDao.updateCotacao(framePai, tipo, custo, corretagem, 0.00);
     }
     
-    public void addAcaoCompra(int quantidade, double valor, double valorNoCaixa) throws SQLException {
+    public void addAcaoCompra(int quantidade, double valor, double valorNoCaixa) throws SQLException, Exception {
         //TODO valor sobra do investimento adicionar a carteira
         double precoAcao = valor * quantidade;        
         double cotacao = getEncargosCompra(precoAcao);
         double precoAcaoCorrigida = precoAcao + cotacao;
+        double resto;
+        double valorTotalCarteira = valorNoCaixa + this.carteira.getSaldo();
+        this.carteira.setSaldo(valorTotalCarteira);
         
-        if(precoAcaoCorrigida > valorNoCaixa) {
+        if(precoAcaoCorrigida > this.carteira.getSaldo()) {
             JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!" 
                     + "\n" 
                     + "\n" 
@@ -88,7 +100,13 @@ public class AcoesController {
                     "Investimento Insuficiente", JOptionPane.ERROR_MESSAGE
             );
         } else {
-            
+//            if(precoAcaoCorrigida - valorNoCaixa > 0) {
+                resto = this.carteira.getSaldo() - precoAcaoCorrigida;
+                this.carteira.setSaldo(resto);
+                
+//            } else {
+//                diminuiDinheiro(this.acionista.getCarteira(), this.carteira.getSaldo());
+//            }
             acaoDAO.addAcao(
                     cotCompra.getNome(), 
                     quantidade,
