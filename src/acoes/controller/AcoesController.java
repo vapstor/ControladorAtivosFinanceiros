@@ -40,7 +40,7 @@ public class AcoesController {
     public boolean testaLimite(double valor) {
         System.out.println("testa limite get saldo" + this.carteira.getSaldo());
         double saldo = this.carteira.getSaldo();
-        return valor <= saldo;
+        return valor < saldo;
     }
     
     public void compraAcao(int idCarteira, double custo, int corretagem, int quantidade) throws SQLException {
