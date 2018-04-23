@@ -28,6 +28,7 @@ public class AcoesController {
     CarteiraDAO carteiraDao = new CarteiraDAO();
     AcionistasDAO acionistaDao = new AcionistasDAO();
     CotacaoDAO cotacaoDao = new CotacaoDAO();
+    Cotacao cotCompra = cotacaoDao.findCotacao("Compra");
     AcaoDAO acaoDAO = new AcaoDAO();
     Acionista acionista;
     Carteira carteira;
@@ -64,33 +65,34 @@ public class AcoesController {
     }
     
     
-    public void registraCotacao(Component framePai, int idCarteira, double custo, double corretagem, int quantidade, double valorNoCaixa) throws SQLException {
-        String nome = "Compra";
-        double precoAcao = custo * quantidade;
-        double precoAcaoCorrigida = corrigeAcaoCompra(precoAcao);
+    public void atualizaCotacaoCompra(Component framePai, String tipo, double custo, double corretagem) throws SQLException {
+        cotacaoDao.updateCotacao(framePai, tipo, custo, corretagem, 0.00);
+    }
+    
+    public void addAcaoCompra(int quantidade, double valor, double valorNoCaixa) throws SQLException {
+        double precoAcao = valor * quantidade;        
+        double precoAcaoCorrigida = precoAcao + getEncargosCompra(precoAcao);
         
-        carteira = carteiraDao.findCarteira(idCarteira);
-        carteira.setSaldo(valorNoCaixa);
         
         if(precoAcaoCorrigida > valorNoCaixa) {
-            JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!");
+            JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!" 
+                    + "\n" 
+                    + "\n" 
+                    + "Preço total com encargos: " +precoAcaoCorrigida
+                    + "\n" 
+                    + "Total de Investimentos em Caixa: " +valorNoCaixa,
+                    "Investimento Insuficiente", JOptionPane.ERROR_MESSAGE
+            );
         } else {
-            cotacaoDao.addCotacao(framePai, nome, custo, corretagem, custo);
+            acaoDAO.addAcao(cotCompra.getNome(), quantidade, precoAcaoCorrigida, this.carteira.getID());
         }
-
-//        double retornoDinheiro = carteiraDao.alteraDinheiro(idCarteira, custo);
-//        System.out.println(retornoDinheiro); //Conferir se retorno está correto
-    }
-    
-    public double corrigeAcaoCompra(double precoAcao) {
-        return precoAcao * getEncargosCompra();
     }
     
     
-    private double getEncargosCompra() {
+    private double getEncargosCompra(double precoAcao) {
         CotacaoDAO ctdao = new CotacaoDAO(); 
         Cotacao ct = ctdao.findCotacao("Compra");
-        Double encargo = ct.getCorretagem();
+        Double encargo = precoAcao * ct.getCorretagem() ;
         return encargo;
     }
     
@@ -115,7 +117,7 @@ public class AcoesController {
         
         ArrayList<ArrayList<String>> data = new ArrayList<>();
         List listaAcoes = getAcoes();
-        
+        System.out.println(listaAcoes+" <- Lista Acoes");
         for(int i = 0; i < listaAcoes.size(); i++ ) {
             acao = (Acao) listaAcoes.get(i);
             ArrayList<String> row = new ArrayList();

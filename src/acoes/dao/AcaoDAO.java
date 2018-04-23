@@ -5,20 +5,30 @@
  */
 package acoes.dao;
 
-import static app.dao.ConnectionDataBase.getConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import acoes.model.Acao;
+import app.dao.GenericDAO;
 
 /**
  *Data Access Object da Ação em si
  * @author vapstor
  */
-public class AcaoDAO {
+public class AcaoDAO extends GenericDAO {
     CarteiraDAO carteiraDao;
+    
+    public void addAcao(String tipo, int quantidade, double valorTotalAcao, int idCarteira) throws SQLException {
+        try {
+            String insert = "INSERT INTO Acoes VALUES(?, ?, ?, ?)";
+            save(insert, tipo, quantidade, valorTotalAcao, idCarteira);
+        } catch (SQLException e) {
+            throw new SQLException("Erro: " + e);
+        }
+        
+    }
     
     public Acao findAcao(int idAcao) throws SQLException {
         String select = "SELECT * FROM Acoes WHERE ID = ?";

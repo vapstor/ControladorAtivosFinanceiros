@@ -27,6 +27,7 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
         if(operacao.equals("ComprarAcoes")) {
             initComponents();
             this.inputAcoesVendidas.setEditable(false);
+            this.inputImposto.setEditable(false);
             this.acionistaLogado = acionista;
             this.carteiraAcionista = carteira;
             this.acao = null;
@@ -57,10 +58,12 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
         valorCarteiraBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        cancelBtn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         inputAcoesVendidas = new javax.swing.JTextField();
+        labelImposto = new javax.swing.JLabel();
+        inputImposto = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,7 +88,12 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
 
         jButton3.setText("Calcular Lucro/Prejuízo Não Realizado");
 
-        jButton4.setText("Cancelar");
+        cancelBtn.setText("Cancelar");
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelBtnActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -99,36 +107,39 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
             }
         });
 
+        labelImposto.setText("Imposto:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(53, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(valorCarteiraBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(inputAcoesVendidas, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(inputAcoesCompradas, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(inputValorUnitarioAcao, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(inputValorCorretagem, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(inputValorCaixa, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton3))))
+                        .addComponent(cancelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(labelImposto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(inputAcoesVendidas, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputAcoesCompradas, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputValorUnitarioAcao, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputValorCorretagem, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputValorCaixa, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputImposto))))
                 .addContainerGap(41, Short.MAX_VALUE))
             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -137,10 +148,14 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputValorCorretagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputImposto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelImposto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputValorUnitarioAcao)
@@ -164,8 +179,8 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(valorCarteiraBtn)
-                    .addComponent(jButton4))
-                .addGap(20, 20, 20))
+                    .addComponent(cancelBtn))
+                .addGap(30, 30, 30))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -185,15 +200,18 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void valorCarteiraBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorCarteiraBtnActionPerformed
+        String tipo = "Compra";
         try {
             AcoesController ac = new AcoesController(acionistaLogado);
-            ac.compraAcao(this,
-                this.carteiraAcionista.getID(),
+            ac.atualizaCotacaoCompra(this,
+                tipo,
                 Integer.parseInt(String.valueOf(this.inputValorUnitarioAcao.getText())),
-                Double.parseDouble(String.valueOf(this.inputValorCorretagem.getText())),
-                Integer.parseInt(String.valueOf(this.inputAcoesCompradas.getText())),
-                Double.parseDouble(String.valueOf(this.inputValorCaixa.getText()))
+                Double.parseDouble(String.valueOf(this.inputValorCorretagem.getText()))
             );
+            ac.addAcaoCompra(
+                Integer.parseInt(String.valueOf(this.inputAcoesCompradas.getText())),
+                Integer.parseInt(String.valueOf(this.inputValorUnitarioAcao.getText())),
+                Double.parseDouble(String.valueOf(this.inputValorCaixa.getText())));
         } catch (SQLException ex) {
             Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -203,16 +221,30 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputAcoesVendidasActionPerformed
 
+    private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        this.setVisible(false);
+        try {
+            abreTelaAcoes();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaCalcularCarteira.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cancelBtnActionPerformed
+    
+    private void abreTelaAcoes() throws SQLException {
+        Acoes telaAcoes = new Acoes(this.acionistaLogado);
+        telaAcoes.setVisible(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelBtn;
     private javax.swing.JTextField inputAcoesCompradas;
     private javax.swing.JTextField inputAcoesVendidas;
+    private javax.swing.JTextField inputImposto;
     private javax.swing.JTextField inputValorCaixa;
     private javax.swing.JTextField inputValorCorretagem;
     private javax.swing.JTextField inputValorUnitarioAcao;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -220,9 +252,11 @@ public class TelaCalcularCarteira extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel labelImposto;
     private javax.swing.JButton valorCarteiraBtn;
     // End of variables declaration//GEN-END:variables
     private Acionista acionistaLogado;
     private Carteira carteiraAcionista;
     private Acao acao;
+
 }

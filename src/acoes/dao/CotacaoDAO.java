@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import acoes.model.Cotacao;
 import java.awt.Component;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,34 +23,36 @@ public class CotacaoDAO extends GenericDAO {
     }
     
     public Cotacao findCotacao(String nome) {
-        String select = "SELECT * FROM cotacao WHERE nome = ?";
-        Cotacao ct = null;
-        try {
-            try (PreparedStatement stmt = getConnection().prepareStatement(select)) {
-                stmt.setString(1, nome);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        //int id, int moedaId, double valor, double corretagem, double imposto
-                        ct = new Cotacao(
-                                rs.getString("nome"),
-                                rs.getDouble("valor"),
-                                rs.getDouble("corretagem"),
-                                rs.getDouble("imposto")
-                        );
-                    }
+        String select = "SELECT * FROM Cotacoes WHERE Nome = ?";
+        Cotacao cotacao = null;
+        
+        try (PreparedStatement stmt = getConnection().prepareStatement(select)) {
+            stmt.setString(1, nome);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    //String tipo, double valor, double corretagem, double imposto
+                    cotacao = new Cotacao(
+                            rs.getString("Nome"),
+                            rs.getDouble("Valor"),
+                            rs.getDouble("Corretagem"),
+                            rs.getDouble("Imposto")
+                    );
                 }
             }
         } catch (SQLException e){
             System.out.println("Erro: " + e);
         }
-        
-        return ct;
+        return cotacao;
     }
     
-    public void addCotacao(Component framePai, String nome, double valor, double corretagem, double imposto) {
-        String insert = "INSERT INTO cotacoes VALUES ?, ?, ?, ?";
-        try {
-           save(insert, nome, valor, corretagem, imposto);
+    public void updateCotacao(Component framePai, String nome, double valor, double corretagem, double imposto) {
+        String update = "UPDATE Cotacoes SET Valor = ?, Corretagem = ?, Imposto = ? WHERE Nome= '"+nome+"'";
+        try (PreparedStatement stmt = getConnection().prepareStatement(update)) {
+            stmt.setDouble(1, valor);
+            stmt.setDouble(2, corretagem);
+            stmt.setDouble(3, imposto);
+            int rs = stmt.executeUpdate();
+            stmt.close();
         } catch (SQLException e){
             System.out.println("Erro: " + e);
         }
