@@ -126,7 +126,6 @@ public class AcoesController {
     
     
     public void vendeAcoes(int[] selectedRows) throws SQLException {
-        System.out.println("Linhas Selecionadas" + Arrays.toString(selectedRows));
         int id;
         for (int i = 0; i < selectedRows.length; i++) {
             id = rowIndexToAcaoId(selectedRows[i]);

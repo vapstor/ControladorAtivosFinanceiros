@@ -6,34 +6,102 @@
 package acoes.view;
 
 import acionistas.model.Acionista;
+import acoes.controller.AcoesController;
+import acoes.model.Acao;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.text.View;
 
 /**
  *
  * @author vapstor
  */
 public class VenderAcoes extends javax.swing.JFrame {
+    
+    private Acao[] acoesParaVender;
+    private int[] quantidades;
+    private AcoesController ac;
+    private JSpinner[] spinners;
+    private JLabel[] labels;
 
-    public VenderAcoes() {
+    public VenderAcoes(int[] selectedRows, AcoesController controller) throws SQLException {
+        this.ac = controller;
+        this.acoesParaVender = recuperaAcoes(selectedRows);
+        
         initComponents();
+        this.spinners = new JSpinner[4];
+        
+        this.labels = new JLabel[4];
+        preencheCampos(acoesParaVender);
+        
+//        System.out.println("VISIBILIDADE" + "\n" + spinnerAcao3.isVisible() + "\n");
     }
-
+    
+     private void preencheCampos(Acao[] acoesParaVender) {
+        this.labels = new JLabel[4];
+        
+        
+        this.labels[0] = this.labelPetrobras;
+        this.labels[1] = this.labelFort;
+        this.labels[2] = this.labelSpotify;
+        this.labels[3] = this.labelGoogle;
+        
+        for (int i = 0; i < acoesParaVender.length; i++) {
+            this.labels[i].setText(acoesParaVender[i].getNome());
+            SpinnerNumberModel sm = new SpinnerNumberModel(0, 0, (double) (acoesParaVender[i].getQuantidade()), 1);
+            switch(i) {
+                case 0: spinnerAcao1.setModel(sm);
+                        spinnerAcao1.setVisible(true);
+                    break;
+                case 1: spinnerAcao2.setModel(sm);
+                        spinnerAcao2.setVisible(true);
+                    break;
+                case 2: spinnerAcao3.setModel(sm);
+                        spinnerAcao3.setVisible(true);
+                    break;
+                case 3: spinnerAcao4.setModel(sm);
+                        spinnerAcao4.setVisible(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        
+    }
+    
+    public final Acao[] recuperaAcoes(int[] selectedRows) throws SQLException {
+        Acao[] acoesToSell;
+        acoesToSell = new Acao[selectedRows.length];
+        int id;
+        Acao acao;
+        for (int i = 0; i < selectedRows.length; i++) {   
+            id = ac.rowIndexToAcaoId(selectedRows[i]);
+            acao = ac.getAcao(id);
+            acoesToSell[i] = acao;
+        }
+        return acoesToSell;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         titulo = new javax.swing.JLabel();
-        labelAcao1 = new javax.swing.JLabel();
+        labelPetrobras = new javax.swing.JLabel();
         spinnerAcao1 = new javax.swing.JSpinner();
-        labelAcao2 = new javax.swing.JLabel();
+        labelFort = new javax.swing.JLabel();
         spinnerAcao2 = new javax.swing.JSpinner();
-        labelAcao3 = new javax.swing.JLabel();
+        labelSpotify = new javax.swing.JLabel();
         spinnerAcao3 = new javax.swing.JSpinner();
         venderAcaoBtn = new javax.swing.JButton();
         cancelBtn = new javax.swing.JButton();
-        labelAcao4 = new javax.swing.JLabel();
+        labelGoogle = new javax.swing.JLabel();
         spinnerAcao4 = new javax.swing.JSpinner();
         labelImposto = new javax.swing.JLabel();
         inputImposto = new javax.swing.JTextField();
@@ -45,14 +113,17 @@ public class VenderAcoes extends javax.swing.JFrame {
         titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titulo.setText("Vender Ações");
 
-        labelAcao1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelAcao1.setText("Acao01");
+        labelPetrobras.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        labelAcao2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelAcao2.setText("Acao02");
+        spinnerAcao1.setVisible(false);
 
-        labelAcao3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelAcao3.setText("Acao03");
+        labelFort.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        spinnerAcao2.setVisible(false);
+
+        labelSpotify.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        spinnerAcao3.setVisible(false);
 
         venderAcaoBtn.setText("Vender Ações");
 
@@ -63,8 +134,9 @@ public class VenderAcoes extends javax.swing.JFrame {
             }
         });
 
-        labelAcao4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelAcao4.setText("Acao04");
+        labelGoogle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        spinnerAcao4.setVisible(false);
 
         labelImposto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelImposto.setText("Imposto:");
@@ -99,11 +171,11 @@ public class VenderAcoes extends javax.swing.JFrame {
                         .addComponent(cancelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelAcao1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelAcao2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelPetrobras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelFort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelImposto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelAcao4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelAcao3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(labelGoogle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelSpotify, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(spinnerAcao4, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -120,19 +192,19 @@ public class VenderAcoes extends javax.swing.JFrame {
                 .addComponent(titulo)
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelAcao1)
+                    .addComponent(labelPetrobras)
                     .addComponent(spinnerAcao1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelAcao2)
+                    .addComponent(labelFort)
                     .addComponent(spinnerAcao2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelAcao3)
+                    .addComponent(labelSpotify)
                     .addComponent(spinnerAcao3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelAcao4)
+                    .addComponent(labelGoogle)
                     .addComponent(spinnerAcao4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -166,6 +238,8 @@ public class VenderAcoes extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_cancelBtnActionPerformed
 
+   
+
     /**
      * @param args the command line arguments
      */
@@ -174,11 +248,11 @@ public class VenderAcoes extends javax.swing.JFrame {
     private javax.swing.JButton cancelBtn;
     private javax.swing.JTextField inputImposto;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel labelAcao1;
-    private javax.swing.JLabel labelAcao2;
-    private javax.swing.JLabel labelAcao3;
-    private javax.swing.JLabel labelAcao4;
+    private javax.swing.JLabel labelFort;
+    private javax.swing.JLabel labelGoogle;
     private javax.swing.JLabel labelImposto;
+    private javax.swing.JLabel labelPetrobras;
+    private javax.swing.JLabel labelSpotify;
     private javax.swing.JSpinner spinnerAcao1;
     private javax.swing.JSpinner spinnerAcao2;
     private javax.swing.JSpinner spinnerAcao3;
@@ -186,4 +260,5 @@ public class VenderAcoes extends javax.swing.JFrame {
     private javax.swing.JLabel titulo;
     private javax.swing.JButton venderAcaoBtn;
     // End of variables declaration//GEN-END:variables
+
 }

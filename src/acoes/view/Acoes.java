@@ -458,12 +458,11 @@ public class Acoes extends javax.swing.JFrame {
         
         if(confirm == JOptionPane.YES_OPTION) {
             try {
-                ac.vendeAcoes(tabelaAcoes.getSelectedRows());
-                abreTelaVenderAcoes();
-                atualizaTabela();
+                abreTelaVenderAcoes(tabelaAcoes.getSelectedRows());
             } catch (SQLException ex) {
                 Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
             }
+            atualizaTabela();
         }
     }//GEN-LAST:event_venderAcaoBtnActionPerformed
 
@@ -535,8 +534,8 @@ public class Acoes extends javax.swing.JFrame {
     }
     
     
-    private void abreTelaVenderAcoes() {
-        VenderAcoes va = new VenderAcoes();
+    private void abreTelaVenderAcoes(int[] selectedRows) throws SQLException {
+        VenderAcoes va = new VenderAcoes(selectedRows, ac);
         va.setVisible(true);
     }
     
