@@ -23,21 +23,22 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton1" pref="316" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jButton1" alignment="0" pref="369" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
                       <Component id="titulo" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="venderAcaoBtn" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="cancelBtn" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="labelCorretagem" max="32767" attributes="0"/>
                           <Component id="labelPetrobras" alignment="0" max="32767" attributes="0"/>
                           <Component id="labelFort" alignment="1" max="32767" attributes="0"/>
                           <Component id="labelImposto" alignment="0" max="32767" attributes="0"/>
@@ -45,12 +46,15 @@
                           <Component id="labelSpotify" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="spinnerAcao4" alignment="1" max="32767" attributes="0"/>
-                          <Component id="spinnerAcao3" alignment="1" max="32767" attributes="0"/>
-                          <Component id="spinnerAcao2" alignment="1" max="32767" attributes="0"/>
-                          <Component id="spinnerAcao1" alignment="1" max="32767" attributes="0"/>
-                          <Component id="inputImposto" pref="109" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="spinnerAcao4" alignment="1" max="32767" attributes="0"/>
+                              <Component id="spinnerAcao3" alignment="1" max="32767" attributes="0"/>
+                              <Component id="spinnerAcao2" alignment="1" max="32767" attributes="0"/>
+                              <Component id="spinnerAcao1" alignment="1" max="32767" attributes="0"/>
+                              <Component id="inputImposto" pref="109" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="inputCorretagem" alignment="1" min="-2" pref="109" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -88,9 +92,14 @@
                   <Component id="labelImposto" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="inputImposto" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="33" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelCorretagem" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputCorretagem" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="40" max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" pref="25" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="venderAcaoBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cancelBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -145,6 +154,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Vender A&#xe7;&#xf5;es"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="venderAcaoBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="cancelBtn">
       <Properties>
@@ -187,6 +199,24 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Lucro/Preju&#xed;zo n&#xe3;o realizado"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelCorretagem">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="text" type="java.lang.String" value="Corretagem"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputCorretagem">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Ubuntu" size="15" style="2"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Digite aqui..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputCorretagemFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputCorretagemFocusLost"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

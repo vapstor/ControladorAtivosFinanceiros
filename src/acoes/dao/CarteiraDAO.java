@@ -117,16 +117,4 @@ public class CarteiraDAO extends GenericDAO {
             }
         }
     }
-   
-    
-//    public void compraAcao(Component framePai, Acionista acionista, double valorAcao ,double corretagem) throws SQLException {
-//        String insert = "INSERT INTO Acionistas ("
-//                + "CPF, Nome, Carteira, Password)"
-//                + "values (?,?,?,?)";
-//        save(
-//                insert, acionista.getCPF(), acionista.getNome(), 
-//                acionista.getCarteira(), acionista.getPassword()
-//        );
-//        JOptionPane.showMessageDialog(framePai , "Acionista cadastrado com sucesso!", "Usuário Adicionado", JOptionPane.PLAIN_MESSAGE);
-//    }
 }

@@ -29,12 +29,17 @@ public class AcaoDAO extends GenericDAO {
         }
     }
     
-     public void vendeAcao(int ID) throws SQLException {
-        try {
+     public void vendeAcao(int ID, int qntd) throws SQLException {
+        if((findAcao(ID).getQuantidade() - qntd) == 0) {
             String delete = "DELETE FROM Acoes WHERE ID= ?";
             delete(delete, ID);
-        } catch (SQLException e) {
-            throw new SQLException("Erro: " + e);
+        } else {
+            try {
+                String update = "UPDATE Acoes SET Quantidade = ? WHERE ID="+ID+";";
+                update(update, qntd);
+            } catch (SQLException e) {
+                throw new SQLException("Erro: " + e);
+            }
         }
         
     }

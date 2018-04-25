@@ -17,7 +17,6 @@ import acionistas.model.Acionista;
 import acoes.model.Carteira;
 import acoes.model.Cotacao;
 import java.awt.Component;
-import java.util.Arrays;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -81,6 +80,10 @@ public class AcoesController {
         cotacaoDao.updateCotacao(framePai, tipo, custo, corretagem, 0.00);
     }
     
+    public void atualizaCotacaoVenda(Component framePai, String tipo, double custo, double corretagem, double imposto) throws SQLException {
+        cotacaoDao.updateCotacao(framePai, tipo, custo, corretagem, imposto);
+    }
+    
     public void addAcaoCompra(String nome, int quantidade, double valor, double valorNoCaixa) throws SQLException, Exception {
         int idCarteira = this.acionista.getCarteira();
         double precoAcao = valor * quantidade;        
@@ -124,13 +127,21 @@ public class AcoesController {
         }
     }
     
-    
-    public void vendeAcoes(int[] selectedRows) throws SQLException {
-        int id;
-        for (int i = 0; i < selectedRows.length; i++) {
-            id = rowIndexToAcaoId(selectedRows[i]);
-            acaoDAO.vendeAcao(id);
-        }
+    // ta dentro de um FOR na view entao vai rodar todos os inputs
+    public void vendeAcoes(double custoSingular, int qntSingular, int idAcao) throws SQLException {
+        double valorVenda = custoSingular * qntSingular;
+        double cotacao = getEncargosVenda(valorVenda);
+        double lucro = valorVenda + cotacao;
+        
+        String operacao = "update";
+        double total = this.carteira.getSaldo() + lucro;
+        this.carteira.setSaldo(total);
+        //aqui seta o novo saldo no BD
+        carteiraDao.alteraDinheiro(acionista.getCarteira(), this.carteira.getSaldo(), operacao);
+        
+        acaoDAO.vendeAcao(idAcao, qntSingular);
+        
+        JOptionPane.showMessageDialog(null, "Ação Vendida com Sucesso!", "Ação Vendida", JOptionPane.INFORMATION_MESSAGE);
     }
     
     public int rowIndexToAcaoId(int i) throws SQLException{
@@ -146,10 +157,10 @@ public class AcoesController {
         return encargo;
     }
     
-    private double getEncargosVenda() {
+    private double getEncargosVenda(double precoVenda) {
         CotacaoDAO ctdao = new CotacaoDAO(); 
         Cotacao ct = ctdao.findCotacao("Venda");
-        Double encargo = ct.getImposto() + ct.getCorretagem();
+        Double encargo = (precoVenda * ct.getImposto()) * ct.getCorretagem();
         return encargo;
     }
     

@@ -17,7 +17,6 @@ import acoes.model.Carteira;
 import auth.view.TelaLogin;
 import java.awt.Image;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -462,7 +461,6 @@ public class Acoes extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
             }
-            atualizaTabela();
         }
     }//GEN-LAST:event_venderAcaoBtnActionPerformed
 
@@ -535,7 +533,8 @@ public class Acoes extends javax.swing.JFrame {
     
     
     private void abreTelaVenderAcoes(int[] selectedRows) throws SQLException {
-        VenderAcoes va = new VenderAcoes(selectedRows, ac);
+        this.setVisible(false);
+        VenderAcoes va = new VenderAcoes(selectedRows, ac, this.acionistaLogado);
         va.setVisible(true);
     }
     
