@@ -5,7 +5,6 @@
  */
 package acoes.controller;
 
-import acionistas.controller.AcionistasController;
 import acionistas.dao.AcionistasDAO;
 import acoes.dao.AcaoDAO;
 import acoes.dao.CarteiraDAO;
@@ -18,6 +17,7 @@ import acionistas.model.Acionista;
 import acoes.model.Carteira;
 import acoes.model.Cotacao;
 import java.awt.Component;
+import java.util.Arrays;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -81,15 +81,20 @@ public class AcoesController {
         cotacaoDao.updateCotacao(framePai, tipo, custo, corretagem, 0.00);
     }
     
-    public void addAcaoCompra(int quantidade, double valor, double valorNoCaixa) throws SQLException, Exception {
-        //TODO valor sobra do investimento adicionar a carteira
+    public void addAcaoCompra(String nome, int quantidade, double valor, double valorNoCaixa) throws SQLException, Exception {
+        int idCarteira = this.acionista.getCarteira();
         double precoAcao = valor * quantidade;        
         double cotacao = getEncargosCompra(precoAcao);
         double precoAcaoCorrigida = precoAcao + cotacao;
-        double resto;
+        //aqui já soma com o getSaldo que foi buscado no BD
         double valorTotalCarteira = valorNoCaixa + this.carteira.getSaldo();
-        this.carteira.setSaldo(valorTotalCarteira);
         
+        
+        
+        //aqui seta o novo saldo local
+        this.carteira.setSaldo(valorTotalCarteira);
+
+        //ve se o saldo da carteira (local + BD) é suficiente
         if(precoAcaoCorrigida > this.carteira.getSaldo()) {
             JOptionPane.showMessageDialog(null, "O investimento é menor que o custo das ações!" 
                     + "\n" 
@@ -100,15 +105,16 @@ public class AcoesController {
                     "Investimento Insuficiente", JOptionPane.ERROR_MESSAGE
             );
         } else {
-//            if(precoAcaoCorrigida - valorNoCaixa > 0) {
-                resto = this.carteira.getSaldo() - precoAcaoCorrigida;
+                String operacao = "update";
+                double resto = this.carteira.getSaldo() - precoAcaoCorrigida;
                 this.carteira.setSaldo(resto);
                 
-//            } else {
-//                diminuiDinheiro(this.acionista.getCarteira(), this.carteira.getSaldo());
-//            }
-            acaoDAO.addAcao(
-                    cotCompra.getNome(), 
+                //aqui seta o novo saldo no BD
+                carteiraDao.alteraDinheiro(idCarteira, this.carteira.getSaldo(), operacao);
+                
+                //aqui compra a ação
+                acaoDAO.addAcao(
+                    nome,
                     quantidade,
                     cotCompra.getCorretagem(),
                     cotacao,
@@ -118,6 +124,21 @@ public class AcoesController {
         }
     }
     
+    
+    public void vendeAcoes(int[] selectedRows) throws SQLException {
+        System.out.println("Linhas Selecionadas" + Arrays.toString(selectedRows));
+        int id;
+        for (int i = 0; i < selectedRows.length; i++) {
+            id = rowIndexToAcaoId(selectedRows[i]);
+            acaoDAO.vendeAcao(id);
+        }
+    }
+    
+    public int rowIndexToAcaoId(int i) throws SQLException{
+        List listaAcoes = getAcoes();
+        Acao acaoId = (Acao) listaAcoes.get(i);
+        return acaoId.getId();
+    }
     
     private double getEncargosCompra(double precoAcao) {
         CotacaoDAO ctdao = new CotacaoDAO(); 
@@ -132,8 +153,6 @@ public class AcoesController {
         Double encargo = ct.getImposto() + ct.getCorretagem();
         return encargo;
     }
-    
-    
     
     public List getAcoes() throws SQLException {
        return acaoDAO.findAcoes();
@@ -161,5 +180,6 @@ public class AcoesController {
         }
         return data;
     }
+
     
 }

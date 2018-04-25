@@ -17,11 +17,11 @@ import acoes.model.Carteira;
 import auth.view.TelaLogin;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
-
 /**
  *
  * @author vapstor
@@ -42,7 +42,6 @@ public class Acoes extends javax.swing.JFrame {
         this.acionistaLogado = acionista;
         this.carteiraAcionistaLogado = ac.getCarteira();
         this.CurrentTableData = ac.getTableData();
-        
         initComponents();
         preencheCampos();
         try {
@@ -59,28 +58,24 @@ public class Acoes extends javax.swing.JFrame {
         ArrayList<ArrayList<String>> newTableData = null;
         try {
             newTableData = ac.getTableData();
+            DefaultTableModel dtm = new DefaultTableModel(0, 0);
+            String header[] = new String[] {"Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
+            dtm.setColumnIdentifiers(header);
+            tabelaAcoes.setModel(dtm);
+            // add row dynamically into the table
+            for (int i = 0; i < newTableData.size(); i++) {
+                dtm.addRow(new Object[] {
+                    newTableData.get(i).get(0),
+                    newTableData.get(i).get(1),
+                    newTableData.get(i).get(2),
+                    newTableData.get(i).get(3),
+                    newTableData.get(i).get(4)
+                });
+            }
+            JOptionPane.showMessageDialog(this, "Tabela Atualizada!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
         } catch (SQLException ex) {
             System.out.println("erro:" + ex);
         }
-        DefaultTableModel dtm = new DefaultTableModel(0, 0);
-        String header[] = new String[] {"Tipo de Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
-        dtm.setColumnIdentifiers(header);
-        tabelaAcoes.setModel(dtm);
-        // add row dynamically into the table      
-        for (int i = 0; i < newTableData.size(); i++) {
-            dtm.addRow(new Object[] { 
-                newTableData.get(i).get(0), 
-                newTableData.get(i).get(1), 
-                newTableData.get(i).get(2), 
-                newTableData.get(i).get(3),
-                newTableData.get(i).get(4)
-            });
-        }
-        JOptionPane.showMessageDialog(this, "Tabela Atualizada!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
-        int x = tabelaAcoes.getSelectedRow();
-        System.out.println(x);
-        int y = tabelaAcoes.getSelectedColumn();
-        System.out.println(y);
     }
     
     public void incrementaSaldo(double valor) throws SQLException {
@@ -292,8 +287,14 @@ public class Acoes extends javax.swing.JFrame {
         tituloInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tituloInfo.setText("Bem Vindo,");
 
+        tabelaAcoes.setCellSelectionEnabled(false);
+        tabelaAcoes.setRowSelectionAllowed(true);
+        tabelaAcoes.setColumnSelectionAllowed(false);
+
+        //tabelaAcoes.setSelectionBackground(Color.lightGray);
+
         DefaultTableModel dtm = new DefaultTableModel(0, 0);
-        String header[] = new String[] {"Tipo de Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
+        String header[] = new String[] {"Ação", "Quantidade", "Corretagem", "Cotação", "Total(R$)"};
         dtm.setColumnIdentifiers(header);
         tabelaAcoes.setModel(dtm);
         // add row dynamically into the table
@@ -307,10 +308,9 @@ public class Acoes extends javax.swing.JFrame {
             });
         }
         tabelaAcoes.setModel(dtm);
-        tabelaAcoes.setColumnSelectionAllowed(true);
         tabelaAcoes.getTableHeader().setReorderingAllowed(false);
         panelScrolldaLista.setViewportView(tabelaAcoes);
-        tabelaAcoes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tabelaAcoes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         tituloPanelLista.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
         tituloPanelLista.setText("Histórico de transações:");
@@ -454,12 +454,22 @@ public class Acoes extends javax.swing.JFrame {
     }//GEN-LAST:event_excluirContaBtnActionPerformed
 
     private void venderAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venderAcaoBtnActionPerformed
-        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(panelActions.getParent(), "Deseja realmente vender as ações selecionadas?", "Vender Ações", JOptionPane.YES_NO_OPTION);
+        
+        if(confirm == JOptionPane.YES_OPTION) {
+            try {
+                ac.vendeAcoes(tabelaAcoes.getSelectedRows());
+                abreTelaVenderAcoes();
+                atualizaTabela();
+            } catch (SQLException ex) {
+                Logger.getLogger(Acoes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_venderAcaoBtnActionPerformed
 
     private void comprarAcaoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarAcaoBtnActionPerformed
         abreTelaConfiguraCotacao();
-        ac.atualizaSaldo(this, this.valueSaldo);
+//        ac.atualizaSaldo(this, this.valueSaldo);
     }//GEN-LAST:event_comprarAcaoBtnActionPerformed
 
     private void adicionaSaldoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaSaldoBtnActionPerformed
@@ -519,12 +529,16 @@ public class Acoes extends javax.swing.JFrame {
     }
     
     private void abreTelaConfiguraCotacao() {
-        String operacao = "ComprarAcoes";
         this.setVisible(false);
-        TelaCalcularCarteira tcc = new TelaCalcularCarteira(operacao, this.acionistaLogado, this.carteiraAcionistaLogado);
+        ComprarAcoes tcc = new ComprarAcoes(this.acionistaLogado, this.carteiraAcionistaLogado);
         tcc.setVisible(true);
     }
     
+    
+    private void abreTelaVenderAcoes() {
+        VenderAcoes va = new VenderAcoes();
+        va.setVisible(true);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionaSaldoBtn;
@@ -556,6 +570,7 @@ public class Acoes extends javax.swing.JFrame {
     private javax.swing.JLabel valueSaldo;
     private javax.swing.JButton venderAcaoBtn;
     // End of variables declaration//GEN-END:variables
+
 
      
 }

@@ -4,7 +4,6 @@ import app.dao.GenericDAO;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import acionistas.model.Acionista;
-import acoes.model.Carteira;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

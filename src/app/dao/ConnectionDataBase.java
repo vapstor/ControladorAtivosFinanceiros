@@ -19,7 +19,7 @@ public class ConnectionDataBase {
     private static final String PASS = "admin";
 
 	public static Connection getConnection() {
-		System.out.println("Conectando ao Banco de Dados Connection DataBase");
+//		System.out.println("Conectando ao Banco de Dados Connection DataBase");
 		try {
                     Class.forName(DRIVER_CLASS);
                     return DriverManager.getConnection(URL, USER, PASS);

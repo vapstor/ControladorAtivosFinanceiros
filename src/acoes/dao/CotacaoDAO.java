@@ -45,8 +45,8 @@ public class CotacaoDAO extends GenericDAO {
             return cotacao;
     }
     
-    public void updateCotacao(Component framePai, String nome, double valor, double corretagem, double imposto) {
-        String update = "UPDATE Cotacoes SET Valor = ?, Corretagem = ?, Imposto = ? WHERE Nome= '"+nome+"'";
+    public void updateCotacao(Component framePai, String operacao, double valor, double corretagem, double imposto) {
+        String update = "UPDATE Cotacoes SET Valor = ?, Corretagem = ?, Imposto = ? WHERE Nome= '"+operacao+"'";
         try (PreparedStatement stmt = getConnection().prepareStatement(update)) {
             stmt.setDouble(1, valor);
             stmt.setDouble(2, corretagem);

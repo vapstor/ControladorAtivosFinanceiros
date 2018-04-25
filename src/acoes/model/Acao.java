@@ -10,6 +10,7 @@ package acoes.model;
  * @author vapstor
  */
 public class Acao {
+    private int id;
     private String nome; // compra/venda
     private int quantidade;
     private double cotacao;
@@ -19,6 +20,7 @@ public class Acao {
     
     //cotacao = custo/preco
     public Acao(int id, String nome, int quantidade, double cotacao, double corretagem, double custo){
+        this.id = id;
         this.nome = nome;
         this.quantidade = quantidade;
         this.custo = custo;
@@ -26,6 +28,13 @@ public class Acao {
         this.cotacao = cotacao;
     }
     
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }    
     
     public String getNome() {
         return nome;

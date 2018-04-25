@@ -20,10 +20,19 @@ import app.dao.GenericDAO;
 public class AcaoDAO extends GenericDAO {
     CarteiraDAO carteiraDao;
     
-    public void addAcao(String tipo, int quantidade, double corretagem, double cotacao, double valorTotalAcao) throws SQLException {
+    public void addAcao(String nome, int quantidade, double corretagem, double cotacao, double valorTotalAcao) throws SQLException {
         try {
             String insert = "INSERT INTO Acoes (Nome, Quantidade, Corretagem, Cotacao, Custo) VALUES(?, ?, ?,? ,?)";
-            save(insert, tipo, quantidade, cotacao, corretagem, valorTotalAcao);
+            save(insert, nome, quantidade, cotacao, corretagem, valorTotalAcao);
+        } catch (SQLException e) {
+            throw new SQLException("Erro: " + e);
+        }
+    }
+    
+     public void vendeAcao(int ID) throws SQLException {
+        try {
+            String delete = "DELETE FROM Acoes WHERE ID= ?";
+            delete(delete, ID);
         } catch (SQLException e) {
             throw new SQLException("Erro: " + e);
         }

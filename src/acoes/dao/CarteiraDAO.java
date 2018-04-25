@@ -52,7 +52,6 @@ public class CarteiraDAO extends GenericDAO {
         return carteira;
     }
     
-    
     public ArrayList findAllCarteiras() throws SQLException {
         String select = "SELECT * FROM Carteira";
         ArrayList listaCarteiras = new ArrayList();
@@ -73,30 +72,40 @@ public class CarteiraDAO extends GenericDAO {
         return listaCarteiras;
     }
     
-    
-    
     public void alteraDinheiro(int idCarteira, double valor, String operacao) throws SQLException {
         Carteira carteira = findCarteira(idCarteira);
+        String update = "UPDATE Carteira SET Saldo = ? WHERE Carteira.ID = ?;";
         
         if(operacao.equals("Adicionar")) {
             carteira.setSaldo(carteira.getSaldo() + valor);
             double novoSaldo = carteira.getSaldo();
-            
-            String update = "UPDATE Carteira SET Saldo = ? WHERE Carteira.ID = ?;";
-            
             try (PreparedStatement stmt = getConnection().prepareStatement(update)) {
                 stmt.setString(1, Double.toString(novoSaldo));
                 stmt.setString(2, Integer.toString(idCarteira));
                 int rs = stmt.executeUpdate();
+                System.out.println(rs);
+                stmt.close();
+            } catch (SQLException e){
+                JOptionPane.showMessageDialog(null,"Erro: " + e);
+            }
+        } else 
+            if(operacao.equals("Diminuir")){
+            carteira.setSaldo(carteira.getSaldo() - valor);
+            System.out.println("novo saldo carteira DEL "+ carteira.getSaldo());
+            double novoSaldo = carteira.getSaldo();
+            try (PreparedStatement stmt = getConnection().prepareStatement(update)) {
+                stmt.setString(1, Double.toString(novoSaldo));
+                stmt.setString(2, Integer.toString(idCarteira));
+                int rs = stmt.executeUpdate();
+                System.out.println(rs);
                 stmt.close();
             } catch (SQLException e){
                 JOptionPane.showMessageDialog(null,"Erro: " + e);
             }
         } else {
-            carteira.setSaldo(carteira.getSaldo() - valor);
-            System.out.println("novo saldo carteira DEL "+ carteira.getSaldo());
-            double novoSaldo = carteira.getSaldo();
-            String update = "UPDATE Carteira SET Saldo = ? WHERE Carteira.ID = ?;";
+            //so atualizar o saldo no banco
+            System.out.println("novo saldo carteira UPDATE "+ carteira.getSaldo());
+            double novoSaldo = valor;
             try (PreparedStatement stmt = getConnection().prepareStatement(update)) {
                 stmt.setString(1, Double.toString(novoSaldo));
                 stmt.setString(2, Integer.toString(idCarteira));
