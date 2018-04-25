@@ -66,7 +66,7 @@ Para facilitar os testes do sistema, sugerimos que no lugar de utilizar uma API 
   `Cotacao` double(10,2) NOT NULL,
   `Custo` double(10,2) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1``
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1``
 
 ### Tabela Cotacoes:
 ``CREATE TABLE `Cotacoes` (
